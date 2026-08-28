@@ -1,0 +1,26 @@
+{
+  "_comment": "Shape for .claude/settings.json hooks — mechanical checks that run automatically so REVIEW.md never has to ask about them. ADAPT the commands to the project's actual tooling, and ALWAYS get user approval before writing this file, since hooks execute shell commands. Hooks receive JSON on stdin (the edited file is .tool_input.file_path). A Stop hook only blocks Claude from finishing when it exits 2, hence `|| exit 2`. Verified against https://code.claude.com/docs/en/hooks on 2026-08-26; re-check if anything looks off.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | xargs npx prettier --write --log-level silent"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run typecheck --silent || exit 2"
+          }
+        ]
+      }
+    ]
+  }
+}

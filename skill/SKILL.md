@@ -1,0 +1,122 @@
+---
+name: workspace-scaffold
+description: Scaffold or re-align a self-enforcing Claude Code workspace around a minimal consistent core — CLAUDE.md, ROADMAP.md, REVIEW.md, DECISIONS.md, and the /vet and /wrap skills that keep them honest — with the unit of work, hooks, and extra skills decided per project. Use whenever the user starts a new project or repo, says "set up this repo/project/workspace," asks to scaffold or structure a project for Claude Code, drops into a codebase with no CLAUDE.md, or asks to re-run, upgrade, or re-align an existing workspace to the current scaffold.
+---
+
+# Workspace Scaffold
+
+Turn a repo into a workspace that enforces good working habits by itself. The core belief: a workflow you have to remember is a workflow you'll drop. Everything this skill produces either lives in the repo (context files Claude reads every session) or runs automatically (hooks), so nothing depends on the user's memory.
+
+Every project gets the **same minimal core** — four files and two skills — so there is nothing to re-learn between repos and improvements to the core reach every project. Everything else is decided per project, once, at scaffold time, and the decision is logged. Consistency is for the human; Claude reads each repo fresh and only needs the content to be right.
+
+Four principles govern every decision below:
+
+1. **Structure is the scaffold's; content is the project's.** The core file set, skill names, and section skeleton are fixed. Everything inside them is written for this specific project and is never regenerated once it exists.
+2. **Mechanical vs. judgment.** Anything a machine can verify (format, lint, types, tests, build) goes in hooks — deterministic, runs every time. REVIEW.md holds only judgment calls. Never duplicate a hook check inside REVIEW.md.
+3. **Self-maintaining.** Stale context is worse than none, because Claude optimizes for a stale goal confidently. Maintenance is baked into the loop (DECISIONS.md, roadmap freshness in /wrap) rather than left to memory.
+4. **Never leave homework.** Replace every `{{PLACEHOLDER}}`, delete every section that doesn't apply. A half-filled template is worse than no template.
+
+## The core (every project)
+
+This is the spec. Greenfield builds it; existing-workspace mode audits against it.
+
+- `CLAUDE.md` — under 60 lines. Sections in this order: intro line(s), `## Commands`, `## Working style`, `## Permissions`, `## Learnings`, and `## Stakeholders` only if someone other than the user owns the project. Project-specific sections (e.g. "Where things live", "Rules that must not bend") go between Commands and Working style.
+- `ROADMAP.md` — `## Current goal`, `## This cycle's focus`, `## Explicitly out of scope`, `## Definition of done for this cycle`. How much each section carries is the project's call; the sections exist.
+- `REVIEW.md` — judgment checks only, sorted into must fix / should fix / fine as is.
+- `DECISIONS.md` — append-only dated log. **Never rewrite or reorder existing entries.**
+- `/vet` (`.claude/skills/vet/SKILL.md`) — applies REVIEW.md to the current work.
+- `/wrap` (`.claude/skills/wrap/SKILL.md`) — closes a session: refreshes ROADMAP.md, appends to DECISIONS.md.
+
+Uppercase names so the four files cluster with CLAUDE.md and README.md at the top of a listing — "about the repo, not part of the product."
+
+**Wrap residue (the cross-repo contract):** the durable output of a `/wrap` is `ROADMAP.md`'s `## Current goal` plus the most recent dated lines in `DECISIONS.md`. Other tools read exactly these two things. Don't move the goal anywhere else.
+
+## Decided per project
+
+Each of these is a fact about the repo, not a tier. Decide once during scaffolding, and log the decision in DECISIONS.md so it isn't re-litigated every session.
+
+- **Unit of work.** Every project has one; /vet reviews against it and /wrap updates its status. The question is the *shape of the work*, not whether there's code. **Discrete deliverables with an observable finish line** — a feature, a fix, a page change, a site defect — get the ticket: `tickets/NNN-slug.md` written by `/ticket` (`assets/skills/ticket.md`), holding job, scope, done-looks-like, boundary, and the approved plan. Written scope before the change; you'd want a stated reason to skip it. (A Webflow ops repo with no code and 32 tickets is the canonical yes.) **Exploratory or continuous work** — research, drafting, a context store — names its own unit: a dated research file, a proposal, a draft. CLAUDE.md's Working style says what it is. Don't install /ticket where the project already has a natural unit; that's a redundant artifact.
+- **Hooks.** If the repo has a formatter, a PostToolUse hook on Edit|Write runs it. If it has a test/typecheck/build command, a Stop hook runs it. Neither → install nothing, log it.
+- **Extra skills and sections.** Whatever the project needs (a `/brief`, a "Rules that must not bend" section). Freely added; never part of the core.
+
+## Step 1: Detect mode
+
+- **No `CLAUDE.md`** → greenfield. Steps 2, 3a, 4, 5, 6.
+- **`CLAUDE.md` exists** → existing workspace. Steps 2 (abbreviated), 3b, 4, 5, 6. Covers both a repo scaffolded by an earlier version of this skill and a brownfield repo with its own CLAUDE.md: audit against the core, add what's missing, keep what's there.
+
+## Step 2: Gather scope
+
+Extract what you can from the conversation and the repo before asking anything: language/framework, tests, build step, formatter, deploy signs, existing README or docs. Every question you can answer by looking is one you don't ask.
+
+Then ask what remains open, in one batch, conversationally:
+
+- **What is this?** One sentence. (CLAUDE.md's first line.)
+- **Who is it for?** A customer, an internal stakeholder, just the user? (Intro line; REVIEW.md's language section.)
+- **What does done look like right now?** The current goal and what's out of scope. (ROADMAP.md.)
+- **Does anyone else own this?** A client, a boss. If yes: who approves what, what never ships without sign-off. (Stakeholders section.)
+- **What's the unit of work?** Is the work a series of discrete deliverables with a checkable finish line (→ tickets), or exploratory/continuous (→ ask what a finished piece looks like and name that)? Code is not the deciding factor.
+- **What inputs flow in?** Only matters for Step 5.
+- **Brownfield:** commands that build/test/lint/format it; conventions the code follows that aren't written down.
+
+For an existing workspace, most of this is already in the files. Read them; ask only about what's genuinely unclear.
+
+## Step 3a: Scaffold (greenfield)
+
+Templates live in `assets/templates/`. Read each one, then write the project's files fully customized from Step 2 — every placeholder replaced, every inapplicable section deleted.
+
+- **CLAUDE.md stays lean.** It loads every session. Short rules and commands here; anything longer becomes a file CLAUDE.md points to with a one-line note on when to read it.
+- **REVIEW.md holds judgment only.** Before writing any check, ask: could a hook verify this? If yes, it's a hook. Items read like questions a thoughtful reviewer asks, not a CI config in prose. The project-specific sections are usually the most valuable part; the template's generic sections get deleted when they have nothing to say.
+- **DECISIONS.md starts nearly empty and grows.** Seed it with what this conversation learned, plus the per-project decisions (unit of work, hooks or not).
+- **Brownfield: document, don't impose.** CLAUDE.md describes the code as it is, flagging inconsistencies rather than silently fixing them.
+
+## Step 3b: Audit and align (existing workspace)
+
+Read everything that exists: CLAUDE.md, ROADMAP.md, REVIEW.md, DECISIONS.md, `.claude/skills/*`, `.claude/settings.json`. Two audits:
+
+**Structure** — compare against the core. Every gap maps to exactly one operation:
+
+| Operation | When | Rule |
+|---|---|---|
+| **add** | A core file, section, or skill is missing | Write it from the template, customized from what the existing files already say about the project. |
+| **rename** | A core skill exists under a different name, or a core file is lowercase | Rename, keep the body, update every reference in CLAUDE.md, skills, and living docs. Leave historical DECISIONS.md entries as written. |
+| **merge** | An installed skill is missing a step the template has, or the template improved a step generically | Template steps are numbered with a bold label. Add missing steps in position. For an existing step, **never remove project-specific adaptations**; if the template gained something generic, propose it as one line in the plan and apply only with approval. |
+| **migrate** | Content lives in the wrong place (e.g. the goal is a line in CLAUDE.md) | Move it, then update whatever pointed at the old location. |
+
+**Usage (the look-back)** — evidence about whether the scaffold *fit*, which no self-assessment can produce:
+- Is ROADMAP.md's date more than a month stale while commits continued? The roadmap isn't earning its place in this project, or /wrap isn't being run — find out which.
+- Is the unit of work being used? An empty `tickets/` after real work means tickets don't fit here.
+- Did the project rename or drop a core skill? That's a signal about the name or the skill.
+- Did the project add something every project would want? That's a template candidate.
+Each finding is a line for IMPROVEMENTS.md (Step 6), not something to "fix" in the project.
+
+**Never:** regenerate REVIEW.md, rewrite CLAUDE.md prose, or touch an existing DECISIONS.md entry. That content is the project's accumulated judgment and is the most valuable thing in the repo.
+
+Show the plan as a short list — one line per operation — and **wait for approval before applying**. Then apply, and append one dated `[decision]` line to DECISIONS.md naming what changed. If the audit finds nothing to do, say so in one line and stop.
+
+## Step 4: Skills and hooks
+
+**Skills.** Copy `vet.md` and `wrap.md` (and `ticket.md` if tickets are the unit of work) from `assets/skills/` to `.claude/skills/<name>/SKILL.md` and adapt each to the project — what to adapt is marked in the file. Keep the numbered step labels intact; they're what Step 3b's merge keys on. `/wrap`'s **Commit** step is dropped only when the repo isn't git-tracked — log that in DECISIONS.md, and suggest `git init`. In existing-workspace mode, only add or merge; don't replace.
+
+**Hooks.** Propose them and **ask before writing `.claude/settings.json`** — hooks execute shell commands, and that's the user's call. `assets/templates/hooks-example.json` has the current shape; the essentials:
+
+- PostToolUse hooks receive JSON on stdin; the edited file is `.tool_input.file_path`.
+- A Stop hook only blocks Claude from finishing if it exits with code 2 — a test command needs `|| exit 2` to enforce anything.
+- If the test suite is slow, put typecheck/lint on Stop and leave the full suite to /vet.
+
+## Step 5: Suggest routines (only with real inputs)
+
+Recurring background work is the layer most often set up prematurely. Only suggest a routine when Step 2 confirmed an input stream exists. Safest first: a read-only **morning brief** over the input folders; a read-only **weekly review** of open issues/tickets; a **PR review** against REVIEW.md. Name the exact input paths. If no inputs exist yet, scaffold the folder and say the routine becomes worth turning on once things land there.
+
+## Step 6: Retro and hand off
+
+**Retro.** Before summarizing, answer once: *could any of this have been done better?* Three sources, in order of trustworthiness:
+
+1. **Look-back findings** from Step 3b (existing workspaces only) — evidence, not opinion.
+2. **Corrections the user made during the run** — a proposed file they cut, a name they changed, a scope they narrowed.
+3. **Your own retro** — something improvised because a template lacked it, a section deleted wholesale, an awkward fit.
+
+Record each in `IMPROVEMENTS.md` in the scaffold repo (the parent of this skill's directory — resolve the symlink). One `## slug` heading per candidate, occurrences as dated lines tagged with the project and the source. **Read the file first**; if an existing heading describes the same thing, add an occurrence to it rather than a new heading — matching is on meaning, not wording. Three lines max per run; if genuinely nothing, write nothing. Padding this file destroys its signal.
+
+**Threshold.** If any heading now has two or more occurrences and no ticket, say so in the handoff: "this has come up twice — want it as a ticket in the scaffold repo?" The user decides. **This skill never edits its own templates**; improvements go through the scaffold repo's own /ticket → /vet → /wrap like any other change.
+
+**Hand off.** Short summary: what was created or changed, the per-project decisions and why, what runs automatically vs. what's a habit, and the two habits that remain on the user — start nontrivial work as the project's unit of work; run /wrap at session end. The repo is now the documentation.

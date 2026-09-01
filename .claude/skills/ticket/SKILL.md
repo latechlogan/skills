@@ -39,4 +39,5 @@ Rules:
 - One ticket = one change. A template change and a SKILL.md change that aren't the same idea are two tickets.
 - If the job matches nothing in ROADMAP.md's current focus, say so before proceeding.
 - If the ticket came from IMPROVEMENTS.md, link the heading in `source:` and, when the ticket closes, add an "→ incorporated" line under that heading so it stops counting.
+- **Name files so a path can't resolve twice.** Two different readers resolve a ticket's paths: the session executing it, from the workspace root, and whoever opens the file, from `tickets/`. Those differ by one level, so a bare `../DECISIONS.md` is wrong for one of them — and where workspaces nest, both levels hold a real file, so the wrong one loads with no error. Write paths from the workspace root, and when a parent and child share a filename, name both in full (`Webflow/DECISIONS.md`, `DJCon/DECISIONS.md`).
 - After writing the ticket, propose a plan and wait for approval. Then write the plan into `## Plan`.

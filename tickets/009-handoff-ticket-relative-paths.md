@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: done
 created: 2026-08-31
 source: IMPROVEMENTS.md#handoff-ticket-relative-paths
 ---
@@ -13,7 +13,7 @@ A bare `../DECISIONS.md` in a ticket silently points at the wrong file. In a nes
 `skill/assets/skills/ticket.md` — one rule under Rules. Does **not** touch SKILL.md (that's ticket 008), /vet, /wrap, the frontmatter fields, or any step label.
 
 ## Done looks like
-A ticket citing a context file names it so that a fresh session executing the hand-off and a human reading the file resolve the *same* file — DJCon's proven fix is naming both in full (`Webflow/DECISIONS.md`, `DJCon/DECISIONS.md`). Re-reading DJCon 004 and 005 against the rule flags both.
+A ticket citing a context file names it so that a fresh session executing the hand-off and a human reading the file resolve the *same* file — DJCon's proven fix is naming both in full (`Webflow/DECISIONS.md`, `DJCon/DECISIONS.md`). Re-reading the DJCon tickets against the rule flags 004 (still a bare `../DECISIONS.md`) and passes 005 and 003, which Logan corrected by hand on 2026-08-31 — the rule has to reproduce that fix without firing on it.
 
 ## Boundary
 The rule is only load-bearing where workspaces nest, but it costs nothing in a standalone repo, so it stays core rather than becoming a nested-only clause.

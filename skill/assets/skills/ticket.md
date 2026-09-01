@@ -40,6 +40,7 @@ Rules:
 - One ticket = one task, one finish line, one reviewable change. If the request contains two jobs, write two tickets and ask which comes first.
 - If "done looks like" can't be written as something observable, the ticket isn't ready — keep narrowing.
 - If the job matches nothing in ROADMAP.md's current focus, say so before proceeding; the user may still want it, but the mismatch should be a decision, not an accident.
+- **Name files so a path can't resolve twice.** Two different readers resolve a ticket's paths: the session executing it, from the workspace root, and whoever opens the file, from `tickets/`. Those differ by one level, so a bare `../DECISIONS.md` is wrong for one of them — and where workspaces nest, both levels hold a real file, so the wrong one loads with no error. Write paths from the workspace root, and when a parent and child share a filename, name both in full (`parent-dir/DECISIONS.md`, `child-dir/DECISIONS.md`).
 - After writing the ticket, propose a plan (inspect relevant context files and code first) and wait for approval before editing anything that affects product behavior. Once approved, write the plan into the ticket's `## Plan` section — a plan that lives only in chat is lost.
 
 <!-- ADAPT WHEN INSTALLING: if this project uses GitHub Issues instead of tickets/, change the destination to opening an issue with the same fields. -->

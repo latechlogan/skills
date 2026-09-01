@@ -1,5 +1,5 @@
 ---
-status: open
+status: deferred
 created: 2026-08-31
 source: IMPROVEMENTS.md#nested-workspaces
 ---
@@ -27,7 +27,9 @@ Holds for non-code repos — both occurrences are. No step label changes and the
 
 Interacts with REVIEW.md's "does CLAUDE.md's template still land under 60 lines when filled?" check, which has no notion of a stricter parent budget; that check needs a nested-case clause or the two rules contradict.
 
-**Evidence is thinner than it looks.** This ticket has two occurrences, not the three the IMPROVEMENTS heading showed — the third was the ticket-009 defect filed under the same heading. ROADMAP focus item 4 sets "three instances before abstracting" for exactly this work. Opened at two on Logan's call; the first plan question is whether to write it now or wait for a third nested workspace.
+**Evidence is thinner than it looks.** This ticket has two occurrences, not the three the IMPROVEMENTS heading showed — the third was the ticket-009 defect filed under the same heading. ROADMAP focus item 4 sets "three instances before abstracting" for exactly this work. Opened at two on Logan's call, then **deferred 2026-08-31**: hold until a third nested workspace is scaffolded. Two shapes (parent-over-children, sibling-outside-the-tree) are two data points that already disagree with each other; a third would say more about what generalizes than any amount of reasoning from these two.
+
+**Resume when:** a third non-standalone workspace is scaffolded — then this ticket goes to `open` and the plan is written against all three.
 
 ## Plan
 [Empty until approved.]

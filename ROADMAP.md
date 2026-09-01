@@ -9,9 +9,9 @@ Prove the minimal core on a real code project. The scaffold has only ever run on
 1. **Scaffold the next code project** greenfield — a site or app with a formatter and a test/typecheck command — and install the standard two hooks for real.
 2. ~~Decide the two headings at threshold~~ — done 2026-08-27 via tickets/002 (Commit step in /wrap) and tickets/003 (`kind:` + triage rule). career-trajectory and chief-of-staff get the Commit merge on their next existing-workspace run.
 3. **Step 2 scope-gathering fix** — "when the repo isn't the product, inspect the product" (`scope-gathering-reads-docs-not-product`, now three occurrences — DJCon, Trinity, OuachitaTerminals — and ticket 005 is open).
-4. **Nested-workspace guidance** — after Ouachita and Trinity are scaffolded under `Webflow/`, write what SKILL.md should say about a parent workspace (line budget, explicit paths, hand-off unit of work). Three instances before abstracting.
+4. **Nested-workspace guidance** — ticket 008, **deferred** until a third non-standalone workspace exists. At two instances (`Webflow/` parent-over-children, `ats-sync` sibling-outside-the-tree), not the three the IMPROVEMENTS heading appeared to show — the third occurrence was a separate defect, now ticket 009. The "three instances before abstracting" rule stands.
 
-Done this cycle: first look-back (RCRM, 4 evidence-backed findings, not noise); retro loop's first real use (two sessions, six honest lines, no padding — the wording holds); ticket 006, the status enum (off-cycle hygiene — the template's four values were behind the four Webflow repos' six; ats-sync had inherited the stale four).
+Done this cycle: first look-back (RCRM, 4 evidence-backed findings, not noise); retro loop's first real use (two sessions, six honest lines, no padding — the wording holds); ticket 006, the status enum (off-cycle hygiene — the template's four values were behind the four Webflow repos' six; ats-sync had inherited the stale four); ticket 009, unambiguous ticket paths.
 
 ## Explicitly out of scope
 - Multi-user / team features (shared managed settings, org-wide policy distribution). This is a solo-developer scaffold.

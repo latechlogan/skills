@@ -11,7 +11,7 @@ Prove the minimal core on a real code project. The scaffold has only ever run on
 3. **Step 2 scope-gathering fix** — "when the repo isn't the product, inspect the product" (`scope-gathering-reads-docs-not-product`, now three occurrences — DJCon, Trinity, OuachitaTerminals — and ticket 005 is open).
 4. **Nested-workspace guidance** — ticket 008, **deferred** until a third non-standalone workspace exists. At two instances (`Webflow/` parent-over-children, `ats-sync` sibling-outside-the-tree), not the three the IMPROVEMENTS heading appeared to show — the third occurrence was a separate defect, now ticket 009. The "three instances before abstracting" rule stands.
 
-Done this cycle: first look-back (RCRM, 4 evidence-backed findings, not noise); retro loop's first real use (two sessions, six honest lines, no padding — the wording holds); ticket 006, the status enum (off-cycle hygiene — the template's four values were behind the four Webflow repos' six; ats-sync had inherited the stale four); ticket 009, unambiguous ticket paths.
+Done this cycle: first look-back (RCRM, 4 evidence-backed findings, not noise); retro loop's first real use (two sessions, six honest lines, no padding — the wording holds); ticket 006, the status enum (off-cycle hygiene — the template's four values were behind the four Webflow repos' six; ats-sync had inherited the stale four); ticket 009, unambiguous ticket paths; and this repo finally took ticket 002's Commit step, a week late.
 
 ## Explicitly out of scope
 - Multi-user / team features (shared managed settings, org-wide policy distribution). This is a solo-developer scaffold.

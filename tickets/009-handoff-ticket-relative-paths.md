@@ -18,7 +18,9 @@ A ticket citing a context file names it so that a fresh session executing the ha
 ## Boundary
 The rule is only load-bearing where workspaces nest, but it costs nothing in a standalone repo, so it stays core rather than becoming a nested-only clause.
 
-Migration is the real cost and is **ask-first**: 15 existing tickets carry a bare `../` reference — Trinity 8, OuachitaTerminals 4, DJCon 3 (RCRM 0). They are live work in Logan's directories, so the plan should propose fixing them as a separate pass, not as part of the template change.
+**No migration needed — corrected 2026-08-31 after checking.** The 15 existing tickets carrying a bare `../` (Trinity 8, OuachitaTerminals 4, DJCon 3, RCRM 0) are *correct*: in that program `../DECISIONS.md` consistently means the parent, and all 16 references resolve there, verified by date and content against both logs. The convention is documented in each site's CLAUDE.md and DECISIONS.md, in all three installed /wrap and /ticket skills, and about 30 references outside `tickets/` depend on it — while `Webflow/CLAUDE.md` itself uses the full form, because it loads in every child session where `../` would be wrong. The one real violation was DJCon 005 using the string to mean the child; Logan fixed it, and 003, by hand.
+
+So the rule is for *new* tickets, where no convention is established. Retrofitting a working documented one would churn 15 correct files and force ~30 more edits to keep the rest coherent.
 
 Evidence is one occurrence, below the threshold of two, but it is a defect rather than a candidate: it misfired twice in a single session, a correction note nearly shipped against the wrong log, and the failure is silent by construction — no error, just a wrong file.
 

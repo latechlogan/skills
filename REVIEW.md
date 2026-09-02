@@ -14,8 +14,8 @@ The core is applied to every project. A template change that's right for a code 
 - Does CLAUDE.md's template still land under 60 lines when filled?
 
 ## Does it survive re-alignment
-Existing repos are upgraded by Step 3b, which keys on structure.
-- Are numbered step labels in the skill files intact and stable? Renaming a label silently breaks merge for every installed copy.
+Existing repos are audited by Step 3b against the shape, never against skill bodies.
+- Does the change add something the audit would have to read a skill body or CLAUDE.md prose to check? Then it's behavior, not shape, and doesn't belong in the core.
 - Does the change move the goal, the decisions log, or their section names? That's the wrap-residue contract; changing it means migrating every scaffolded repo and anything that reads them.
 - If a core file or skill was renamed: is there a `rename` path in 3b for it, and were all template references updated?
 

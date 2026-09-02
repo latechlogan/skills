@@ -1,23 +1,26 @@
 # Roadmap
 
-Last updated: 2026-08-31 <!-- /wrap refreshes this; if this date is more than ~2 weeks old, treat the goal as suspect and ask before optimizing for it -->
+Last updated: 2026-09-01 <!-- /wrap refreshes this; if this date is more than ~2 weeks old, treat the goal as suspect and ask before optimizing for it -->
 
 ## Current goal
-Prove the minimal core on a real code project. The scaffold has only ever run on markdown-only and ops repos; hooks and a Stop hook that actually blocks have never fired on a repo with a build. Success is one code project scaffolded end to end and a Stop hook blocking a bad finish at least once.
+Make the core a data contract that workspaces can rely on. Success is one workspace's session acting on another workspace's state — current goal, recent learnings, open work — using only the core section of SKILL.md, without reading the other workspace's CLAUDE.md or skill bodies. The scaffold owns the shape and audits conformance; behavior is each project's own.
 
 ## This cycle's focus
-1. **Scaffold the next code project** greenfield — a site or app with a formatter and a test/typecheck command — and install the standard two hooks for real.
-2. ~~Decide the two headings at threshold~~ — done 2026-08-27 via tickets/002 (Commit step in /wrap) and tickets/003 (`kind:` + triage rule). career-trajectory and chief-of-staff get the Commit merge on their next existing-workspace run.
-3. **Step 2 scope-gathering fix** — "when the repo isn't the product, inspect the product" (`scope-gathering-reads-docs-not-product`, now three occurrences — DJCon, Trinity, OuachitaTerminals — and ticket 005 is open).
-4. **Nested-workspace guidance** — ticket 008, **deferred** until a third non-standalone workspace exists. At two instances (`Webflow/` parent-over-children, `ats-sync` sibling-outside-the-tree), not the three the IMPROVEMENTS heading appeared to show — the third occurrence was a separate defect, now ticket 009. The "three instances before abstracting" rule stands.
+1. ~~**Ticket 010 — the core as a data contract.**~~ Done 2026-09-01. Both tests passed: RCRM audit proposed zero operations; a reader with only the core section got Trinity's goal, last three learnings, and 26 open tickets by kind right. Three spec gaps the read exposed (unit-of-work discovery, ticket H1, which statuses need attention) were closed the same day.
+2. **Step 2 scope-gathering fix** — "when the repo isn't the product, inspect the product" (`scope-gathering-reads-docs-not-product`, three occurrences — DJCon, Trinity, OuachitaTerminals — and ticket 005 is open). Procedure, so it survives the reframe.
+3. **Follow-ups named by ticket 010, each its own ticket if wanted:** an evidence ledger in the shape (Trinity's `WORK-LOG.md` — one occurrence, below the rule of three; the core has intent, reasoning, and work, nowhere for results); a toolkit in this repo that reads the shape across workspaces (current goals, open tickets by kind, recent learnings).
+4. **Nested-workspace guidance** — ticket 008, **deferred** until a third non-standalone workspace exists. Less pressing under a data contract: a nested child conforms to the same shape, and the parent's pointers are behavior.
 
-Done this cycle: first look-back (RCRM, 4 evidence-backed findings, not noise); retro loop's first real use (two sessions, six honest lines, no padding — the wording holds); ticket 006, the status enum (off-cycle hygiene — the template's four values were behind the four Webflow repos' six; ats-sync had inherited the stale four); ticket 009, unambiguous ticket paths; and this repo finally took ticket 002's Commit step, a week late.
+Superseded 2026-09-01: "prove the minimal core on a real code project, with a Stop hook that blocks." Hooks were already per project; proving them proves a behavior, not the core. Ticket 007 (a merge operation for Step 3b) dropped with the merge machinery.
+
+Done before this cycle: first look-back (RCRM, 4 evidence-backed findings); retro loop's first real use; ticket 006, the status enum; ticket 009, unambiguous ticket paths; this repo took ticket 002's Commit step.
 
 ## Explicitly out of scope
 - Multi-user / team features (shared managed settings, org-wide policy distribution). This is a solo-developer scaffold.
 - Routines and scheduled agents as part of the core. Suggested only when a project has real inputs.
 - Tiers, project-type templates, or any per-project-type fork of the core. The core is the core; everything else is decided per project.
 - The skill editing its own templates.
+- Propagating behavior between workspaces — skill bodies, hooks, ticket conventions. The scaffold audits shape; a project that wants another project's behavior copies it deliberately.
 
 ## Definition of done for this cycle
-One real code repo carries the full core plus tickets and hooks, a Stop hook has blocked at least once, and both threshold headings have a ticket or a logged decline.
+Ticket 010 is closed (done 2026-09-01). Ticket 005 has a plan or a logged decline, and `mechanical-check-without-hook-event` (two occurrences, no ticket) has a ticket or a logged decline.

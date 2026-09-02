@@ -1,5 +1,5 @@
 ---
-status: open
+status: dropped
 created: 2026-08-31
 source: request
 ---
@@ -23,4 +23,4 @@ The hard part is the judgment call this row has to encode: when a repo's version
 Real evidence to design against, four installed `tickets/README.md` files: RCRM (`## Frontmatter` + grep recipe + migration history), Trinity, DJCon, OuachitaTerminals. All four already document the same six values ticket 006 ratified, so the vocabulary itself needs no change — only the structure does. That makes this a clean test case: the right answer is visibly "reconcile, don't overwrite."
 
 ## Plan
-[Empty until approved.]
+Dropped 2026-09-01 — superseded by ticket 010. The core is now a data contract; Step 3b no longer reconciles skill bodies or template prose, so the operation this ticket wanted has nothing to act on. The one shape-level case here (a status vocabulary that must stay single) is covered by the frontmatter minimum in the core section.

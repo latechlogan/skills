@@ -5,7 +5,7 @@ description: Close out a work session — refresh ROADMAP.md so it never goes st
 
 # /wrap
 
-Session close-out. This is the maintenance step that keeps the workspace's context files true, so future sessions don't optimize for a stale goal or relearn old lessons. Do all five, briefly. Keep the numbered labels — the scaffold uses them to merge updates into this file.
+Session close-out. This is the maintenance step that keeps the workspace's context files true, so future sessions don't optimize for a stale goal or relearn old lessons. Do all five, briefly.
 
 1. **Roadmap freshness.** Re-read `ROADMAP.md`. If today's work changed what's true — a focus item finished, scope shifted, something got cut — update it and refresh the "Last updated" date. The `## Current goal` section is what other tools read as this project's status, so it must be current. If the goal itself now looks wrong, say so and ask; never silently rewrite direction.
 2. **Learnings.** Did anything surprising happen — a bug with a non-obvious cause, a tool quirk, a decision that forecloses alternatives, something a stakeholder said? Append each as one dated line to `DECISIONS.md`. If genuinely nothing, append nothing; padding the log dilutes it.

@@ -38,4 +38,4 @@ skill/
 
 ## Re-aligning an existing workspace
 
-Run the skill in any repo that already has a `CLAUDE.md`. It audits structure against the core and usage against reality, proposes only additive operations (add / rename / merge / migrate), and never regenerates `REVIEW.md`, rewrites `CLAUDE.md` prose, or touches a `DECISIONS.md` entry.
+Run the skill in any repo that already has a `CLAUDE.md`. It audits structure against the core and usage against reality, proposes only additive operations (add / rename / migrate), and never regenerates `REVIEW.md`, rewrites `CLAUDE.md` prose, or touches a `DECISIONS.md` entry.

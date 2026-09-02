@@ -26,12 +26,12 @@ Read ROADMAP.md for what matters right now. Read REVIEW.md before declaring work
 - Ask first: new dependencies, schema/migration changes, deleting files, touching {{PROJECT_SPECIFIC_SENSITIVE_AREAS — e.g. auth, payments, archive history}}.
 - Human-owned: production deploys, customer data decisions, billing, anything that sends or authenticates externally.
 
-## Learnings
-When something surprising happens or a choice forecloses alternatives, append one dated line to DECISIONS.md.
-
 {{#IF_STAKEHOLDER}}
 ## Stakeholders
 - Owner: {{STAKEHOLDER_NAME_ROLE}}
 - Never ships without their sign-off: {{SIGNOFF_ITEMS — e.g. public copy, pricing, brand assets}}
 - Brand/voice standards: {{BRAND_STANDARDS_OR_POINTER}}
 {{/IF_STAKEHOLDER}}
+
+## Learnings
+When something surprising happens or a choice forecloses alternatives, append one dated line to DECISIONS.md.

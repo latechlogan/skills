@@ -19,6 +19,7 @@ Candidate improvements to the scaffold, recorded by the skill at the end of each
 ## mechanical-check-without-hook-event
 - 2026-08-27 — RCRM — `scripts/verify-live.sh` is mechanical but fires post-publish, which maps to no hook event (publishing isn't an Edit/Write). /vet runs it as step 1 instead. The mechanical/judgment split assumes every mechanical check is a hook; a third shape exists: mechanical checks that /vet runs first. (look-back)
 - 2026-08-28 — Trinity — same shape, third ops repo: the backlog's hand-run "Verify" block became `scripts/verify-live.sh`, run by /vet step 1, no hook. SKILL.md Step 4 still offers only hook-or-nothing. (retro)
+- → ticket 012, open 2026-09-02.
 
 ## wrap-commit-step
 - 2026-08-27 — RCRM — added a **Commit** step to /wrap because git history is the only undo for a no-build repo. career-trajectory didn't, but is also git-tracked. Plausibly every git-tracked project wants this in the template. (look-back)
@@ -44,6 +45,7 @@ Candidate improvements to the scaffold, recorded by the skill at the end of each
 ## hand-off-ticket-across-folders
 - 2026-08-27 — Webflow/ — a ticket written by one workspace into another's `tickets/`, with `## Plan` filled at write time because the writer has the context and the executor doesn't. RCRM's ticket 028 ("execution happens in ../DJCon/") is the same shape, unnamed. (look-back)
 - 2026-08-28 — ats-sync — the ticket arrived before the workspace: `Webflow/` wrote `repos/ats-sync/tickets/001` with a step 15 saying "this repo has no /vet, /wrap, CLAUDE.md" and deferring close-out to the parent. Scaffolding had to migrate that step. A hand-off into an unscaffolded repo is effectively a request to scaffold it; the ticket frontmatter also grew `depends on:` for the cross-workspace prerequisite. (look-back)
+- → ticket 013, open 2026-09-02 (the hand-off's shape only). Two caveats recorded there: `~/repos/ats-sync` no longer exists on disk, so this occurrence and its `depends on:` detail are unverifiable — the field's only live uses, in DJCon 006 and 007, are intra-workspace; and RCRM 028, called "the same shape" above, parks a finding in the *originating* workspace as `blocked` rather than writing into an executor's folder, which is the same topic and a different failure. If ticket 013's plan agrees, that shape splits into its own heading.
 
 ## scope-gathering-reads-docs-not-product
 - 2026-08-27 — DJCon — Step 2 says extract scope from "the conversation and the repo"; for an ops repo the repo is three files and the product is a live site. Probing it (curl, MCP list_sites) produced most of the workspace's content: a year-stale last publish, a CDN cache trap, five dead Apply links, a NAP inconsistency, no analytics — none in any doc, and the parent rollup's "Next" for the site was wrong because of it. Step 2 should say: when the repo isn't the product, inspect the product. (retro)

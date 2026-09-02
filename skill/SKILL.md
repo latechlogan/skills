@@ -52,6 +52,8 @@ Each of these is a fact about the repo, not a tier. Decide once during scaffoldi
 
 Extract what you can from the conversation and the repo before asking anything: language/framework, tests, build step, formatter, deploy signs, existing README or docs. Every question you can answer by looking is one you don't ask.
 
+**When the repo isn't the product, probe the product first.** For a code repo the repo *is* the product and this is a no-op — skip it. When the repo is a few markdown files describing something that lives elsewhere, inspect that thing before asking anything, and treat every claim the existing docs make about it as unverified until the probe agrees. Two moves: get the product's own state from the authoritative source (for a site: last-published date, live domains, `curl` of the key pages counting whatever that project actually tracks, a sweep for old branding or placeholder text, robots/sitemap, whether analytics exists), then reconcile the two in both directions — every claim the docs make about the product, and everything the product shows that no doc mentions. The specific probe is the project's; the discipline is that a doc's claim is a hypothesis. Carry what it finds into Step 3a as dated `[learning]` lines in DECISIONS.md, and write ROADMAP.md's goal from the probe rather than from the docs.
+
 Then ask what remains open, in one batch, conversationally:
 
 - **What is this?** One sentence. (CLAUDE.md's first line.)
@@ -91,6 +93,7 @@ Skill bodies are not audited. A `/wrap` that grew Facts and Commit steps, a `/ve
 - Is ROADMAP.md's date more than a month stale while commits continued? The roadmap isn't earning its place in this project, or /wrap isn't being run — find out which.
 - Is the unit of work being used? An empty `tickets/` after real work means tickets don't fit here.
 - Did the project rename or drop a core skill? That's a signal about the name or the skill.
+- Did the docs disagree with the product? *(Only where the repo isn't the product; skip it otherwise.)* That's evidence the Step 2 probe earned its place — or, if they always agreed, that it didn't.
 - Did the project add *data another workspace would need to read* — a file, a section, a frontmatter field? That's a shape candidate. Behavior it added (a skill step, a script) is its own and is not a finding.
 Each finding is a line for IMPROVEMENTS.md (Step 6), not something to "fix" in the project.
 

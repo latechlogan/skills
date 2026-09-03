@@ -3,14 +3,14 @@
 Last updated: 2026-09-02 <!-- /wrap refreshes this; if this date is more than ~2 weeks old, treat the goal as suspect and ask before optimizing for it -->
 
 ## Current goal
-The shape is stable and the scaffold is hands-off; it changes only for defects, and only when Logan decides by looking at repos. The open question is whether the read path — a session loading the goal and the DECISIONS tail at start — actually changes what a session *does*. Success is one real repo where, after adopting the new CLAUDE.md opening line or the SessionStart hook, a session opens with the previous session's context and acts on it unprompted: picks up parked work, or connects a goal to something it can recommend.
+Stable. The shape is proven — three repos audit with zero operations — and the read path is proven: in career-trajectory on 2026-09-02, a session opened with the goal and DECISIONS tail in context before its first tool call, and a printed learning visibly shaped its output. The scaffold changes for defects only, when Logan decides by looking at repos. Success is that nothing needs to happen here; a stale date on this file means "check that's still true," not "find work."
 
 ## This cycle's focus
-1. **Adopt the read path in one real repo.** career-trajectory already carries a local version of the opening line; the SessionStart hook has never been installed anywhere. Install it in one repo (career-trajectory or an ops repo), run a fresh session, and record in that repo's DECISIONS.md whether the session started with context. That is the test the 2026-09-02 pivot rests on.
-2. **Ticket 005 closes on the next ops-repo scaffold** — the probe paragraph is written; it needs a greenfield run to prove.
-3. **Existing repos and the new templates.** Nothing is owed: the shape didn't change, so 3b proposes nothing. The new opening line, the `## Context` ticket section, and the trimmed REVIEW.md reach existing repos only if adopted deliberately. Do it repo by repo when a session is there anyway, not as a pass from here.
-
-Deferred: ticket 008 (nested-workspace guidance) until a third non-standalone workspace exists. The cross-workspace toolkit stays parked until the within-repo read path is proven — it's the same idea, one level up.
+Nothing active. Residual items, each on its own trigger:
+1. **Hook and opening line in the other repos** — repo by repo, when a session is there anyway. Never as a pass from here. career-trajectory has both.
+2. **Ticket 005** closes on the next greenfield ops-repo scaffold.
+3. **Ticket 008** stays deferred until a third non-standalone workspace exists.
+4. **The cross-workspace toolkit** — a tool in this repo that reads the shape across workspaces (goals, open work by kind, recent learnings). It was parked until the within-repo read path was proven; it now is. Not a scaffold change, so the defects-only freeze doesn't apply. Logan's call whether it's worth building; the honest case for it is that cross-repo reading is currently a test result, not a habit, and a tool is what would make it one.
 
 ## Explicitly out of scope
 - Multi-user / team features. This is a solo-developer scaffold.
@@ -18,7 +18,8 @@ Deferred: ticket 008 (nested-workspace guidance) until a third non-standalone wo
 - Tiers, project-type templates, or any per-project-type fork of the shape.
 - The skill editing its own templates, or collecting findings from the repos it scaffolds.
 - Propagating behavior between workspaces — skill bodies, hooks, ticket conventions. A project that wants another project's behavior copies it deliberately.
-- Improvements. The scaffold is frozen to defects: shipped instructions that contradict reality or leave a session improvising.
+- Improvements. Defects only: shipped instructions that contradict reality or leave a session improvising.
+- A standing "take initiative" instruction in the shape. Initiative is a mode a repo invokes (a `/next` skill, a routine) — per project.
 
 ## Definition of done for this cycle
-One repo has the SessionStart hook installed and a DECISIONS.md `[learning]` line saying what the first session after it did differently, or that it did nothing differently. Either answer closes the cycle.
+Met 2026-09-02. There is no next cycle until a defect or a decision opens one.

@@ -13,7 +13,7 @@ Review the current uncommitted or unpushed work against `REVIEW.md`, and sort ev
 
 Rules:
 
-- Skip anything hooks already verify (formatting, lint, types, tests passing). If a hook failed, that's already visible — don't re-litigate it. If the repo has no hooks, don't invent mechanical findings either; judgment only, on the things `REVIEW.md` names.
+- Skip anything hooks already verify (formatting, lint, types, tests passing). If a hook failed, that's already visible — don't re-litigate it. If the project has a mechanical check with no hook event behind it ({{VERIFY_SCRIPT — e.g. `scripts/verify-live.sh` after a publish — or delete}}), run that first and report it plainly; then judgment only, on the things `REVIEW.md` names. Don't invent mechanical findings beyond that.
 - Review against the {{UNIT_OF_WORK — the ticket in tickets/, the research question, …}} and `ROADMAP.md`'s current cycle. Changes outside the stated scope go in must-fix as "unexplained scope change" unless there's a stated reason. Anything from the out-of-scope list is must-fix regardless of how well built it is.
 - Actually exercise the affected flow if the change is user-facing — run it and walk through it as a first-time user; don't review the diff alone.
 - End with a one-line verdict: clear, clear after must-fixes, or hold.

@@ -2,7 +2,7 @@
 
 One file per ticket, created by /ticket. Naming: `NNN-short-slug.md` (e.g., `007-waitlist-form.md`). The approved plan lives in the ticket too, under `## Plan`, so intent, scope, plan, and status are one file.
 
-Tickets are durable so that work has a written finish line before it starts, /vet can review a change against what was actually asked, and routines have something real to read.
+A ticket is where something surfaced now gets parked for later with its context intact, so a future session — or another workspace — can pick it up cold. Write it while the context is deep; the reader won't have it.
 
 ## Status
 
@@ -19,7 +19,7 @@ Tickets are durable so that work has a written finish line before it starts, /ve
 
 `blocked` and `deferred` both mean "not now," but only `blocked` has a person to chase. Keep them apart.
 
-**Need a seventh word? Don't add it here.** Raise it in the workspace-scaffold repo — the scaffold that installed this file — where template candidates accumulate in its `IMPROVEMENTS.md`; at two occurrences it becomes a ticket and the template changes for every project. Inventing one locally makes this file the authority for one repo, which is how a shared vocabulary drifts apart.
+**The list is closed because other workspaces read `status` without knowing this repo.** A seventh word invented here is one only this repo understands. If one is genuinely needed, it's a change to the shared shape and is made in the workspace-scaffold repo, not here.
 
 ## Kind
 

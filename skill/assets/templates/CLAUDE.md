@@ -3,7 +3,7 @@
 {{ONE_SENTENCE_WHAT_THIS_IS}}
 For: {{WHO_THIS_IS_FOR}} — {{PAIN_AND_PROMISE_ONE_LINE — delete if this isn't a product with users}}
 
-Read ROADMAP.md for what matters right now. Read REVIEW.md before declaring work done. Check DECISIONS.md before debugging anything strange.
+Before starting anything, read ROADMAP.md's `## Current goal` and the last few lines of DECISIONS.md — that's where the previous session left off, and what it learned. Read REVIEW.md before declaring work done.
 
 ## Commands
 - Dev: {{DEV_COMMAND}}

@@ -1,6 +1,16 @@
 {
-  "_comment": "Shape for .claude/settings.json hooks — mechanical checks that run automatically so REVIEW.md never has to ask about them. ADAPT the commands to the project's actual tooling, and ALWAYS get user approval before writing this file, since hooks execute shell commands. Hooks receive JSON on stdin (the edited file is .tool_input.file_path). A Stop hook only blocks Claude from finishing when it exits 2, hence `|| exit 2`. Verified against https://code.claude.com/docs/en/hooks on 2026-08-26; re-check if anything looks off.",
+  "_comment": "Shape for .claude/settings.json hooks \u2014 mechanical checks that run automatically so REVIEW.md never has to ask about them. ADAPT the commands to the project's actual tooling, and ALWAYS get user approval before writing this file, since hooks execute shell commands. SessionStart prints the residue so a session never starts green \u2014 safe to offer every project. Hooks receive JSON on stdin (the edited file is .tool_input.file_path). A Stop hook only blocks Claude from finishing when it exits 2, hence `|| exit 2`. Verified against https://code.claude.com/docs/en/hooks on 2026-08-26; re-check if anything looks off.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sed -n '/^## Current goal/,/^## /p' ROADMAP.md | sed '$d'; echo; tail -n 5 DECISIONS.md"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",

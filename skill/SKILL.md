@@ -1,18 +1,18 @@
 ---
 name: workspace-scaffold
-description: Scaffold or re-align a self-enforcing Claude Code workspace around a minimal consistent core — CLAUDE.md, ROADMAP.md, REVIEW.md, DECISIONS.md, and the /vet and /wrap skills that keep them honest — with the unit of work, hooks, and extra skills decided per project. Use whenever the user starts a new project or repo, says "set up this repo/project/workspace," asks to scaffold or structure a project for Claude Code, drops into a codebase with no CLAUDE.md, or asks to re-run, upgrade, or re-align an existing workspace to the current scaffold.
+description: Give a repo the files a Claude Code session needs so it never starts green — the current goal, what was decided and learned, the bar work must clear, and a place to park work for later — in one shape every repo shares, so any session can read any repo's state. CLAUDE.md, ROADMAP.md, REVIEW.md, DECISIONS.md, /vet and /wrap; the unit of work, hooks, and everything else decided per project. Use whenever the user starts a new project or repo, says "set up this repo/project/workspace," asks to scaffold or structure a project for Claude Code, drops into a codebase with no CLAUDE.md, or asks to re-run, upgrade, or re-align an existing workspace to the current scaffold.
 ---
 
 # Workspace Scaffold
 
-Turn a repo into a workspace that enforces good working habits by itself. The core belief: a workflow you have to remember is a workflow you'll drop. Everything this skill produces either lives in the repo (context files Claude reads every session) or runs automatically (hooks), so nothing depends on the user's memory.
+A session in a repo should never start green. It should know the current goal, what earlier sessions decided and learned, the bar the work has to clear, and what was parked for later — without the user re-explaining any of it. This skill gives a repo the files that hold that context and the one habit (`/wrap`) that keeps them true, so the context is in the repo rather than in anyone's memory.
 
-Every project gets the **same minimal core** — four files, two skill names, one line grammar — so there is nothing to re-learn between repos and any workspace can read any other's state. Everything else is decided per project, once, at scaffold time, and the decision is logged. Consistency is for the human; Claude reads each repo fresh and only needs the content to be right.
+Every project gets the **same minimal shape** — four files, two skill names, one line grammar — so a session in one repo can read another repo's state and know what it will find. The shape is the whole of what's shared. How a repo behaves — its unit of work, its hooks, what its skills do, what it's for — is decided per project, once, and logged. Consistency is for the human; Claude reads each repo fresh and only needs the content to be right.
 
 Four principles govern every decision below:
 
 1. **Structure is the scaffold's; content and behavior are the project's.** The core file set, skill names, section skeleton, and line grammar are fixed. Everything inside them is written for this specific project and is never regenerated once it exists.
-2. **Mechanical vs. judgment.** Anything a machine can verify (format, lint, types, tests, build) goes in hooks — deterministic, runs every time. REVIEW.md holds only judgment calls. Never duplicate a hook check inside REVIEW.md.
+2. **Mechanical vs. judgment.** Anything a machine can verify (format, lint, types, tests, build) goes in hooks — deterministic, runs every time. REVIEW.md holds only judgment calls. Never duplicate a hook check inside REVIEW.md. One exception: a mechanical check whose trigger isn't something Claude does in-session (a live site after a publish, an export after a manual run) has no hook event to fire on — it becomes a script that `/vet` runs first, before the judgment pass.
 3. **Self-maintaining.** Stale context is worse than none, because Claude optimizes for a stale goal confidently. Maintenance is baked into the loop (DECISIONS.md, roadmap freshness in /wrap) rather than left to memory.
 4. **Never leave homework.** Replace every `{{PLACEHOLDER}}`, delete every section that doesn't apply. A half-filled template is worse than no template.
 
@@ -20,7 +20,7 @@ Four principles govern every decision below:
 
 The core is a **data contract, not a behavior contract**. What every scaffolded workspace shares is the shape of its data — which files exist, which sections they carry, and the line grammar inside them — so that a session in one workspace can read another's state without knowing how that workspace works. How a workspace behaves (what its skills do between start and residue, its hooks, its unit of work, how it finds and makes its own improvements) is decided per project and is nobody else's business. Greenfield builds the shape; existing-workspace mode audits conformance to it and nothing else.
 
-**The residue (why the core exists):** at any moment a workspace's state is `ROADMAP.md`'s `## Current goal` plus the most recent dated lines in `DECISIONS.md`. Every `/wrap` leaves those two current. Other workspaces and tools read exactly these; don't move the goal anywhere else.
+**The residue (why the core exists):** at any moment a workspace's state is `ROADMAP.md`'s `## Current goal` plus the most recent dated lines in `DECISIONS.md`. Every `/wrap` leaves those two current — that is the contract's write path. The read path is that every session in the workspace loads both *at start*, before doing anything, and other workspaces and tools read exactly these; CLAUDE.md's opening lines say so, and a project can add a `SessionStart` hook that prints them (Step 4). Don't move the goal anywhere else.
 
 The shape:
 
@@ -74,6 +74,7 @@ Templates live in `assets/templates/`. Read each one, then write the project's f
 - **REVIEW.md holds judgment only.** Before writing any check, ask: could a hook verify this? If yes, it's a hook. Items read like questions a thoughtful reviewer asks, not a CI config in prose. The project-specific sections are usually the most valuable part; the template's generic sections get deleted when they have nothing to say.
 - **DECISIONS.md starts nearly empty and grows.** Seed it with what this conversation learned, plus the per-project decisions (unit of work, hooks or not).
 - **Brownfield: document, don't impose.** CLAUDE.md describes the code as it is, flagging inconsistencies rather than silently fixing them.
+- **Brownfield with an existing work queue.** A repo often arrives with a loose action list — a backlog, a launch checklist, a prompt someone wrote to execute. Dissolve it into the shape rather than keeping it beside it: items → the unit of work, grouped by finish line (nice-to-haves stay a plain list in ROADMAP.md, not tickets yet); gotchas and things already tried → DECISIONS.md; must-not-break rules → CLAUDE.md; anything blocked on a person → ROADMAP.md (a "Waiting on" section if the project wants one); a hand-run verify block → a script `/vet` runs first. Then delete the source file and log the dissolution as one `[decision]` line.
 
 ## Step 3b: Audit and align (existing workspace)
 
@@ -89,13 +90,7 @@ Read everything that exists: CLAUDE.md, ROADMAP.md, REVIEW.md, DECISIONS.md, `.c
 
 Skill bodies are not audited. A `/wrap` that grew Facts and Commit steps, a `/vet` that runs a script first — that is the project's behavior, and the audit doesn't look at it. The only questions about a skill are whether it exists under the core name and whether its residue lands where the shape says.
 
-**Usage (the look-back)** — evidence about whether the scaffold *fit*, which no self-assessment can produce:
-- Is ROADMAP.md's date more than a month stale while commits continued? The roadmap isn't earning its place in this project, or /wrap isn't being run — find out which.
-- Is the unit of work being used? An empty `tickets/` after real work means tickets don't fit here.
-- Did the project rename or drop a core skill? That's a signal about the name or the skill.
-- Did the docs disagree with the product? *(Only where the repo isn't the product; skip it otherwise.)* That's evidence the Step 2 probe earned its place — or, if they always agreed, that it didn't.
-- Did the project add *data another workspace would need to read* — a file, a section, a frontmatter field? That's a shape candidate. Behavior it added (a skill step, a script) is its own and is not a finding.
-Each finding is a line for IMPROVEMENTS.md (Step 6), not something to "fix" in the project.
+**Fit** — two things worth telling the user, not fixing: a ROADMAP.md date more than a month stale while commits continued means the roadmap isn't earning its place or `/wrap` isn't being run; an empty `tickets/` after real work means tickets don't fit here. Either is the project's call.
 
 **Never:** regenerate REVIEW.md, rewrite CLAUDE.md prose, or touch an existing DECISIONS.md entry. That content is the project's accumulated judgment and is the most valuable thing in the repo.
 
@@ -110,23 +105,15 @@ Show the plan as a short list — one line per operation — and **wait for appr
 - PostToolUse hooks receive JSON on stdin; the edited file is `.tool_input.file_path`.
 - A Stop hook only blocks Claude from finishing if it exits with code 2 — a test command needs `|| exit 2` to enforce anything.
 - If the test suite is slow, put typecheck/lint on Stop and leave the full suite to /vet.
+- A `SessionStart` hook that prints `## Current goal` and the last few DECISIONS.md lines is the mechanical form of the read path — offer it to every project; it has no failure mode and costs nothing.
+- A mechanical check with no in-session trigger (principle 2's exception) is not a hook. It's a script; `/vet` runs it first.
 
 ## Step 5: Suggest routines (only with real inputs)
 
 Recurring background work is the layer most often set up prematurely. Only suggest a routine when Step 2 confirmed an input stream exists. Safest first: a read-only **morning brief** over the input folders; a read-only **weekly review** of open issues/tickets; a **PR review** against REVIEW.md. Name the exact input paths. If no inputs exist yet, scaffold the folder and say the routine becomes worth turning on once things land there.
 
-## Step 6: Retro and hand off
+## Step 6: Hand off
 
-**Retro.** Before summarizing, answer once: *could any of this have been done better?* Three sources, in order of trustworthiness:
-
-1. **Look-back findings** from Step 3b (existing workspaces only) — evidence, not opinion.
-2. **Corrections the user made during the run** — a proposed file they cut, a name they changed, a scope they narrowed.
-3. **Your own retro** — something improvised because a template lacked it, a section deleted wholesale, an awkward fit.
-
-A finding belongs to the scaffold only if it is about the **shape** (data a workspace lacked, a section that was always empty, a field another workspace needed to read) or the **procedure** (a question Step 2 didn't ask, an operation Step 3b lacked). A behavior a project wanted — a skill step, a script, a ticket convention — goes in that project's DECISIONS.md and stops there.
-
-Record each in `IMPROVEMENTS.md` in the scaffold repo (the parent of this skill's directory — resolve the symlink). One `## slug` heading per candidate, occurrences as dated lines tagged with the project and the source. **Read the file first**; if an existing heading describes the same thing, add an occurrence to it rather than a new heading — matching is on meaning, not wording. Three lines max per run; if genuinely nothing, write nothing. Padding this file destroys its signal.
-
-**Threshold.** If any heading now has two or more occurrences and no ticket, say so in the handoff: "this has come up twice — want it as a ticket in the scaffold repo?" The user decides. **This skill never edits its own templates**; improvements go through the scaffold repo's own /ticket → /vet → /wrap like any other change.
+Anything improvised during the run — a section the template lacked, a fit that was awkward — is a `[learning]` line in *this* project's DECISIONS.md, where the next session here will read it. The scaffold does not collect findings from projects; it changes when its owner decides it should, by looking at repos. **This skill never edits its own templates.**
 
 **Hand off.** Short summary: what was created or changed, the per-project decisions and why, what runs automatically vs. what's a habit, and the two habits that remain on the user — start nontrivial work as the project's unit of work; run /wrap at session end. The repo is now the documentation.

@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 created: 2026-09-02
 source: IMPROVEMENTS.md#mechanical-check-without-hook-event
 ---
@@ -28,3 +28,6 @@ No change to the wrap-residue contract and no step label moves, so no scaffolded
 **Weak evidence to check in the plan:** both occurrences are Webflow ops repos, which is arguably one context wearing two names — the same objection that got `finished-ticket-archive` declined. Confirm the rule is stated generally (mechanical check, no in-session trigger) and not as a site-publishing special case, or it fails the non-code test for the wrong reason.
 
 ## Plan
+
+### Done 2026-09-02
+Folded into SKILL.md principle 2 and Step 4, and `skill/assets/skills/vet.md` no longer forbids the verify-script-first arrangement. Done in the cleanup pass, not as its own change.

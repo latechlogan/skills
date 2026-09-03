@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 created: 2026-08-28
 source: IMPROVEMENTS.md#existing-backlog-migration
 ---
@@ -20,3 +20,6 @@ Holds for non-code repos — all four occurrences are. Doesn't change a step lab
 
 ## Plan
 [Empty until approved.]
+
+### Done 2026-09-02
+Folded into SKILL.md Step 3a as the "Brownfield with an existing work queue" bullet, in the cleanup pass that cut the improvement loop. The "Waiting on" question resolved as: no template section; the bullet says "a 'Waiting on' section if the project wants one."

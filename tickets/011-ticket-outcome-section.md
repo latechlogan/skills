@@ -1,5 +1,5 @@
 ---
-status: open
+status: dropped
 created: 2026-09-02
 source: request
 ---
@@ -28,3 +28,6 @@ Does **not** change the wrap-residue contract (`ROADMAP.md ## Current goal` + th
 **Open question for the plan — shape or behavior?** `SKILL.md`'s core section puts ticket *body* sections under "Decided per project," not in the data contract; only the H1 and the `status`/`kind`/`created` frontmatter are contract. So `## Outcome` enters as a reference-implementation default, not as shape — unless another workspace would need to *read* it, which is the test the core section sets. Recommendation: keep it out of the contract for now. A parent workspace building a rollup from its children's shipped work is the case that would change that; `Webflow/` is the repo to watch, and Trinity's stakeholder-reporting `WORK-LOG.md` is evidence that need is real but currently one project's business.
 
 ## Plan
+
+### Dropped 2026-09-02
+Dropped in the cleanup pass. An `## Outcome` section is an improvement, not a defect, and the scaffold is frozen to defects; results keep going to DECISIONS.md `[learning]` lines. `/ticket` did gain `## Context` and plan-at-creation, which is the parking half of what this ticket wanted.

@@ -6,6 +6,7 @@ Judgment checks only — there is nothing mechanical to verify in this repo, so 
 - Does the change match its ticket and ROADMAP.md's current cycle? If ROADMAP.md's date is stale, flag that first.
 - Any files changed outside the ticket's scope? A change to `SKILL.md` that also quietly reworded a template is two changes.
 - Did complexity arrive that the ticket didn't require — a new conditional, a new placeholder, a new step?
+- Was it delivered in passes small enough to review one at a time? A change to SKILL.md, the templates, and this repo's own files is three passes, not one.
 
 ## Does it hold everywhere
 The core is applied to every project. A template change that's right for a code repo and wrong for a research repo is wrong.
@@ -19,10 +20,9 @@ Existing repos are audited by Step 3b against the shape, never against skill bod
 - Does the change move the goal, the decisions log, or their section names? That's the wrap-residue contract; changing it means migrating every scaffolded repo and anything that reads them.
 - If a core file or skill was renamed: is there a `rename` path in 3b for it, and were all template references updated?
 
-## Self-improvement discipline
-- Did the skill's Step 6 wording invite padding? "Three lines max, nothing is allowed" must survive every edit.
-- Is anything in this change the skill modifying itself rather than a human deciding? That's must-fix.
-- If an IMPROVEMENTS.md heading was incorporated, is it marked so it stops counting?
+## Hands off
+- Is anything in this change the skill modifying itself, or collecting findings from a project back into this repo? That's must-fix — the shape changes when Logan decides, by looking at repos.
+- Does the change tell a scaffolded repo how to *behave* — a skill step, a hook, a convention — rather than what data to keep? Then it's a greenfield default at most, and the text should say so.
 
 ## Language
 - Would a tired junior understand every name and instruction without the conversation that produced it? SKILL.md is read cold by a fresh session every time.

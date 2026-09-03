@@ -1,5 +1,5 @@
 ---
-status: open
+status: dropped
 created: 2026-09-02
 source: IMPROVEMENTS.md#hand-off-ticket-across-folders
 ---
@@ -34,3 +34,6 @@ No wrap-residue or step-label change. No scaffolded repo needs migrating: the th
 **Deferred, one occurrence:** a hand-off written into an *unscaffolded* repo is effectively a request to scaffold it (the ats-sync case). That is a `SKILL.md` Step 1 change, a different idea from the ticket's shape, and it rests on the occurrence that can't be verified. Its own ticket if it recurs.
 
 ## Plan
+
+### Dropped 2026-09-02
+Dissolved: `/ticket` now writes `## Plan` at creation for every ticket, so a hand-off is no longer a special case. The evidence-quality caveats in Boundary stand as written — the ats-sync occurrence was never verified and RCRM 028 was a different failure.

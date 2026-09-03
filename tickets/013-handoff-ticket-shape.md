@@ -37,3 +37,6 @@ No wrap-residue or step-label change. No scaffolded repo needs migrating: the th
 
 ### Dropped 2026-09-02
 Dissolved: `/ticket` now writes `## Plan` at creation for every ticket, so a hand-off is no longer a special case. The evidence-quality caveats in Boundary stand as written — the ats-sync occurrence was never verified and RCRM 028 was a different failure.
+
+### Correction 2026-09-02
+The "unverifiable" claim in Boundary point 1 was wrong. `ats-sync` exists at `~/Documents/TrinityGroup/repos/ats-sync/` with a `tickets/` folder (001, 003, …); I checked `~/repos/ats-sync`, which was never its location — the session memory recorded the right path and I didn't consult it. Point 2 (RCRM 028 is a different failure) stands. The ticket stays dropped for the reason given: plan-at-creation dissolves the hand-off as a special case regardless.

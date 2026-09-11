@@ -1,5 +1,5 @@
 ---
-status: open
+status: dropped
 created: 2026-09-11
 source: request
 ---
@@ -44,19 +44,44 @@ Nested workspaces (ticket 008's territory): the source rule above is what makes 
 Scaffolded repos needing migration: all 12 listed above. Per the 2026-09-03 precedent, a batch pass driven from this repo is safe only with exact-match insertion that asserts the anchor (`N. **Summary.**`) appears exactly once per file, renumbers, and appends one `[decision]` line to each repo's own DECISIONS.md. career-trajectory and chief-of-staff lack a Commit step, so their anchor is Summary directly.
 
 ## Plan
-(proposed) Do not edit before Logan approves.
 
-1. `skill/assets/skills/wrap.md`: insert the step below between `4. **Commit.**` and Summary; Summary becomes 6; "Do all five" becomes six; frontmatter description adds "hand off to ~/notes"; ADAPT note adds "drop **Notes hand-off** if `~/notes` does not exist, and log it."
+### Dropped 2026-09-11 — reframed as pull
+The push plan (a **Notes hand-off** step in every /wrap; text in git at 2a89cdc) rested on the prompt's assumption that /wrap is one user-level file. It is 12 per-repo copies, so push meant a 12-file behavior propagation the 2026-09-02 pivot ruled out, plus a second copy of each repo's open work in `todo.md` that would drift from the repo. Logan chose pull: nothing changes in the scaffold or in any /wrap; `~/notes` reads the shape. The plan below executes in a `~/notes` session, which has none of this context — it is written to be followed cold.
 
-   ```
-   5. **Notes hand-off.** Source is this workspace's folder name (the directory holding `.claude/skills/wrap`), not the git root — nested workspaces share a git root. Re-read `~/notes/log.md` and `~/notes/todo.md` immediately before writing; other sessions may have wrapped. Then:
-      - Append one line to today's `## YYYY-MM-DD` section of `log.md`, creating the section at the top if it is missing: `- HH:MM [<source>] shipped: …; open: …`.
-      - In `todo.md`, touch only lines tagged `[<source>]`. Mark finished ones `[x]` and move them to `## Done`. Add follow-ups surfaced this session as `- [ ] [<source>] text` under the section `~/notes/domains.md` assigns this source; if the cell is blank, ask. Every other line stays byte-identical.
-      - Print the before/after of each `todo.md` line you changed so it can be reviewed in-session.
-      If `~/notes` does not exist, skip this step silently.
-   ```
+### Plan for `~/notes` (pull)
 
-2. `skill/SKILL.md`, Step 4 Skills paragraph: one sentence, "**Notes hand-off** assumes `~/notes`; drop it where that repo does not exist and log the drop."
-3. Test by reading, no execution: apply the source rule to DJCon (expect `DJCon`) and newsletter (expect `newsletter`); confirm `~/notes/README.md`'s grammar matches the step's output line for line.
-4. Fleet pass, separately approved: exact-match insert before each copy's `N. **Summary.**` line (assert one match), renumber Summary, append `- 2026-MM-DD — [decision] /wrap gained a Notes hand-off step (workspace-scaffold ticket 014).` to that repo's DECISIONS.md. 12 files. Commit each repo. career-trajectory and chief-of-staff: also decide whether to add the missing Commit step while there (ticket 002 left that to each repo's own session).
-5. `~/notes/decisions.md`: one line recording that the repo side of the contract shipped via this ticket.
+1. **`domains.md` gains a `path` column.** `| repo | path | domain |`, paths absolute (`~` allowed). Nested Webflow sites point at the site folder, not the git root. Update the prose: source name is the workspace folder name, and this table is what `bin/repos` walks.
+2. **`bin/repos [-p]`** — read-only, `/bin/sh`, standard macOS tools, same conventions as `bin/brief`. For each row whose domain matches (`work` by default, `personal` with `-p`), print one block:
+   - Repo name, then `ROADMAP.md`'s `Last updated:` date; append `(stale)` if older than 14 days.
+   - `## Current goal`: the section body up to the next H2, first non-empty line only.
+   - Open work. If `tickets/` exists: count of tickets by `status:` for `open`, `in-progress`, `blocked`; list the H1 titles of `in-progress` and `blocked` ones (those are active or need chasing; `open` is a count). If no `tickets/`: the bullet lines under `## This cycle's focus`.
+   - Last commit, scoped to the folder so shared-repo sites report their own: `git -C <path> log -1 --format='%ad %s' --date=format:'%Y-%m-%d %H:%M' -- .`
+   - A row whose path is missing or has no `ROADMAP.md` prints one line saying so and moves on. Never exits non-zero for one bad repo.
+3. **`bin/brief`** calls `bin/repos` with the same flag after the todo section. Drop the footer's "Last /wrap" line: `log.md` never carries repo entries under pull, and each repo block already shows its last commit. Keep the notes-since-review count.
+4. **`README.md`**: `[source]` on todo/log items is `note`, `note:p`, or a repo name that /review assigns by hand; nothing is written here by any repo's /wrap. Remove the rule about another repo's /wrap touching only its own items. Add `bin/repos` under Files and Commands. Fix "git root basename" to folder name.
+5. **`.claude/skills/wrap/SKILL.md`** description: drop "the real /wrap ... writes here"; it reads via `bin/repos`.
+6. **`decisions.md`**: one line — pull chosen over push, why (12 copies, drift), pointer to workspace-scaffold ticket 014. Amend nothing earlier.
+7. **Test on real repos**, not in the abstract: run `bin/repos` and check DJCon reports its own last commit (not Webflow's), RCRM shows counts not 50 titles, career-trajectory (no tickets) shows its focus list, and a deliberately wrong path prints one line and the run continues.
+
+Known gaps, accepted: "what shipped" is a commit message, not prose. career-trajectory and chief-of-staff have no Commit step in /wrap, so their stamp lags until they add one (ticket 002 left that to each repo).
+
+## Review 2026-09-11 (workspace-scaffold session, before approval)
+
+Ticket was written from a `~/notes` session without this repo's context. Fleet facts verified on disk: 12 copies, one `**Summary.**` anchor each, career-trajectory and chief-of-staff lack Commit, Trinity has 7 steps, ats-sync's Commit step carries a two-repo note. `~/notes` grammar and `bin/brief`'s provenance line match the ticket.
+
+**Corrections to the text as written**
+- Step text says "skip this step silently" when `~/notes` is missing; the ADAPT note and the SKILL.md sentence say "log it." Pick one — log it, matching the Commit precedent.
+- `~/notes/README.md` still defines `[source]` as "git root basename"; `domains.md` and this ticket say folder name. README is the contract there and is wrong. Fix belongs in `~/notes`, plan step 5.
+- "Why push, not pull" does not mention ROADMAP.md focus item 4 — the cross-workspace read tool, already parked here and explicitly exempt from the defects-only freeze. That is the pull design, and the ticket argues against it without knowing it exists.
+
+**Where the plan breaks this repo's principles**
+- Plan step 4 (the fleet pass) is "propagating behavior between workspaces," which ROADMAP.md lists out of scope. The 2026-09-03 precedent was the read path, which SKILL.md places in the core; a notes write is not shape — no scaffolded repo keeps any new data. Under ticket 010, steps 1–2 change only a greenfield default and reach none of the 12 existing copies; step 4 is the whole ticket, and it is the part the pivot ruled out.
+- The `todo.md` write gives every repo's open work a second home. Open work already lives in the repo's residue (`## Current goal`, focus list, tickets with status open / in-progress / blocked). `[<source>]` items in `todo.md` would be a copy that has to be kept in sync by an LLM step under a "byte-identical otherwise" rule that nothing enforces. That is the dual-write problem the read path was adopted to avoid.
+- The push argument — "follow-ups surfaced this session are judgment only the wrapping session has" — is true, but the shape's answer is that /wrap writes them into the repo (a ticket, a focus item). A follow-up that exists only in `~/notes/todo.md` is one the repo's next session never sees. If that is happening, it is a defect in that repo's /wrap, and a push would paper over it.
+
+**Better solution: pull, built in `~/notes`**
+A read-only script beside `bin/brief` that, for each repo in `domains.md`, prints `## Current goal`, open work (tickets with an attention-needing status, or the focus list where there are no tickets), and the last commit time as "last /wrap". Zero scaffold changes, zero fleet pass, no write contention, the freeze holds, and it is ROADMAP item 4 landing where its consumer lives. Personal items stay `[note]` entries as today.
+
+If Logan still wants a push, the defensible half is the `log.md` line only — an append-only event, no state to keep in sync, same discipline as DECISIONS.md — and the `todo.md` write should be dropped. Its mechanical form is a `SessionEnd` hook per project (principle 2), not a /wrap body step; that is a settings.json install, still 12 repos.
+
+Decision is Logan's: (a) reframe 014 as the pull script in `~/notes`, drop here; (b) keep push, log line only, fleet pass separately approved; (c) approve as written, lifting the freeze.

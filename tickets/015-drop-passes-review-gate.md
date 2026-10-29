@@ -43,3 +43,6 @@ Touches `skill/assets/templates/REVIEW.md` and the three repo REVIEW.md files ab
 3. Commit: ff-weekly and ff-waiver-tool get one commit each. rm-weekly gets a commit with only the Passes hunk and the DECISIONS line staged (`git add -p`).
 4. Verify with the grep in Done looks like, plus `git diff` on each REVIEW.md to confirm nothing else moved.
 5. Run /vet here and close the ticket.
+
+## Outcome
+Done as planned. rm-weekly had already committed slice 05 by execution time, so no `git add -p` was needed. rm-weekly and ff-weekly were committed on their current feature branches, on top of unmerged work that also appends to DECISIONS.md, so branching from `main` would have conflicted. ff-waiver-tool got branch `drop-passes-check`. Nothing was merged. /vet found the same check in this repo's own `REVIEW.md` (a bullet under `## Scope and intent`, so the `## Passes` grep missed it) and it was removed too.

@@ -6,7 +6,6 @@ Judgment checks only — there is nothing mechanical to verify in this repo, so 
 - Does the change match its ticket and ROADMAP.md's current cycle? If ROADMAP.md's date is stale, flag that first.
 - Any files changed outside the ticket's scope? A change to `SKILL.md` that also quietly reworded a template is two changes.
 - Did complexity arrive that the ticket didn't require — a new conditional, a new placeholder, a new step?
-- Was it delivered in passes small enough to review one at a time? A change to SKILL.md, the templates, and this repo's own files is three passes, not one.
 
 ## Does it hold everywhere
 The core is applied to every project. A template change that's right for a code repo and wrong for a research repo is wrong.

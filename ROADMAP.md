@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-09-11 <!-- /wrap refreshes this; if this date is more than ~2 weeks old, treat the goal as suspect and ask before optimizing for it -->
+Last updated: 2026-10-29 <!-- /wrap refreshes this; if this date is more than ~2 weeks old, treat the goal as suspect and ask before optimizing for it -->
 
 ## Current goal
 Stable. The shape is proven — three repos audit with zero operations — and the read path is proven: in career-trajectory on 2026-09-02, a session opened with the goal and DECISIONS tail in context before its first tool call, and a printed learning visibly shaped its output. The scaffold changes for defects only, when Logan decides by looking at repos. Success is that nothing needs to happen here; a stale date on this file means "check that's still true," not "find work."
@@ -11,6 +11,7 @@ Nothing active. Residual items, each on its own trigger:
 2. **Ticket 005** closes on the next greenfield ops-repo scaffold.
 3. **Ticket 008** stays deferred until a third non-standalone workspace exists.
 4. **The cross-workspace toolkit** — resolved 2026-09-11, not built here. It lands as a read-only script in `~/notes` (`bin/repos`, plan in ticket 014) that walks each repo's goal, open work by status, and last commit. The notes repo is the consumer, so the reader lives there; the scaffold changes nothing. First real use of the shape as a data contract across repos.
+5. **Ticket 015** — done 2026-10-29: the REVIEW.md Passes check made agents stop after every pass. Removed from the template and the three repos that had it; the run-through rule went into the global `~/.claude/CLAUDE.md`, which is the channel for rules about how Logan works.
 
 ## Explicitly out of scope
 - Multi-user / team features. This is a solo-developer scaffold.

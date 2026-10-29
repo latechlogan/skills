@@ -8,9 +8,6 @@ Judgment checks only — {{"lint, types, tests, and build are enforced by hooks 
 - Did we add complexity the work didn't require? Anything from the out-of-scope list creeping in?
 - Anything CLAUDE.md's Permissions marks ask-first or human-owned — was it actually approved?
 
-## Passes
-- Was this delivered in passes small enough to understand and review one at a time? A long solution is fine; a long *pass* isn't. If a change can't be explained in a few sentences, it should have been several changes, each reviewed before the next.
-
 {{#PROJECT_SPECIFIC_SECTIONS — the checks that only make sense for this project: the main flow to exercise, the data that must not be lost, the copy that must use the audience's words. These are usually the most valuable part of the file.}}
 
 {{#IF_STAKEHOLDER}}

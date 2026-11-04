@@ -19,7 +19,7 @@ A ticket is where something surfaced now gets parked for later with its context 
 
 `blocked` and `deferred` both mean "not now," but only `blocked` has a person to chase. Keep them apart.
 
-**The list is closed because other workspaces read `status` without knowing this repo.** A seventh word invented here is one only this repo understands. If one is genuinely needed, it's a change to the shared shape and is made in the workspace-scaffold repo, not here.
+**The list is closed because other workspaces read `status` without knowing this repo.** A seventh word invented here is one only this repo understands. If one is genuinely needed, it's a change to the shared shape and is made in the workspace-scaffold skill's source repo (`skills`), not here.
 
 ## Kind
 

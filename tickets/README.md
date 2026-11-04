@@ -2,7 +2,7 @@
 
 One file per ticket, created by /ticket. Naming: `NNN-short-slug.md`. The approved plan lives in the ticket under `## Plan`.
 
-A ticket here is a change to the skill, a template, or a project skill. Improvements that reach two occurrences in IMPROVEMENTS.md become tickets; so do template changes Logan asks for directly. Wording fixes don't need one.
+A ticket here is a change to any skill in this repo: a `SKILL.md`, a template or reference it loads, or a project skill. Numbers are one sequence across all skills; name the skill in the title. Improvements that reach two occurrences in IMPROVEMENTS.md become tickets; so do template changes Logan asks for directly. Wording fixes don't need one.
 
 ## Status
 
@@ -19,4 +19,4 @@ A ticket here is a change to the skill, a template, or a project skill. Improvem
 
 `blocked` and `deferred` both mean "not now," but only `blocked` has a person to chase. Keep them apart.
 
-**Need a seventh word? Don't add it here.** Log it in `IMPROVEMENTS.md`; at two occurrences it becomes a ticket and `assets/templates/tickets-README.md` changes for every project. That template is the authority — this file mirrors it.
+**Need a seventh word? Don't add it here.** Log it in `IMPROVEMENTS.md`; at two occurrences it becomes a ticket and `workspace-scaffold/assets/templates/tickets-README.md` changes for every project. That template is the authority — this file mirrors it.

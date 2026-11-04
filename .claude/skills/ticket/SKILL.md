@@ -1,6 +1,6 @@
 ---
 name: ticket
-description: Park a proposed change to the workspace-scaffold skill or its templates as a ticket with its context and plan written in. Use when Logan describes a nontrivial change to SKILL.md, a template, or a project skill, or when he says "make a ticket."
+description: Park a proposed change to a skill in this repo as a ticket with its context and plan written in. Use when Logan describes a nontrivial change to a SKILL.md, a template or reference, or a project skill, or when he says "make a ticket."
 ---
 
 # /ticket
@@ -16,25 +16,25 @@ created: YYYY-MM-DD
 source: request
 ---
 
-# NNN — [short title]
+# NNN — [skill-name]: [short title]
 
 ## Job
-[What changes in the skill/templates, one or two sentences.]
+[Which skill, and what changes in it, one or two sentences.]
 
 ## Context
 [What the writer knows that the reader won't: which real repo showed the problem, what it looked like there, what was already tried. Name files in full.]
 
 ## Scope
-[Which files: SKILL.md, which templates, which project skills. What it does NOT touch.]
+[Which files, named from the repo root (`project-kickoff/SKILL.md`, `workspace-scaffold/assets/templates/REVIEW.md`). What it does NOT touch. If it touches the kickoff → scaffold hand-off, name both sides.]
 
 ## Done looks like
 [Observable — e.g. "existing-workspace mode run on career-trajectory proposes exactly N operations and nothing else."]
 
 ## Boundary
-[Does it hold for a non-code repo? Does it change the wrap-residue contract or a step label? If yes, which scaffolded repos need migrating.]
+[workspace-scaffold: does it hold for a non-code repo? Does it change the wrap-residue contract or a step label? If yes, which scaffolded repos need migrating. Other skills: what existing projects or hand-offs does it affect?]
 
 ## Plan
-[Written now: files that change, in order, and which real repo it gets tested on. Mark `(proposed)` until Logan approves; don't edit before then.]
+[Written now: files that change, in order, and which real repo or conversation it gets tested on. Mark `(proposed)` until Logan approves; don't edit before then.]
 ```
 
 Rules:

@@ -98,3 +98,24 @@ Built as planned on 2026-11-26; awaiting the main session's cold read and /vet. 
 - **Phase 7 got one sentence** naming what the scaffold installs with no kickoff input (`/wrap`, `/ticket` and its README, the SessionStart hook), so the hand-off check in step 5 has nothing unmentioned.
 - **Verification run:** a scratch Node repo was scaffolded from the new text and factory-v2's `install.py` was run against it. The only contract warning was "no ticket carries `approved:`", and it cleared after a scratch ticket was approved through the scaffolded `/ticket`. A secrets-only pre-push drew no warning either. The Stop hook was run for real: a green run wrote the stamp, an unchanged tree skipped, an edited file ran again, a red run was retried, and a tag-only change ran it again. The phrase grep finds none of the three phrases.
 - **Left alone, outside criteria 13 to 15:** workspace-scaffold's principle 2 and Step 3a still say mechanical checks "go in hooks", and the REVIEW.md template still says checks are "enforced by hooks". They now sit awkwardly with "hooks are feedback". This repo's own `tickets/README.md`, which mirrors the template, has no `## Approved` section.
+
+## Correction round (2026-11-26, after `/vet`)
+An independent `/vet` of a6eb9db returned "clear after must-fixes". Logan approved fixing all of it in one round, and **widened the workspace-scaffold boundary** to cover the four leftover lines in must-fix 3 (they contradict criterion 1, and the Boundary above had put them out of reach).
+
+Must fix:
+1. **Step 3b and old tickets.** `workspace-scaffold/SKILL.md`: `approved:` is required on tickets written from now on; re-alignment never backfills it into existing tickets and never adds a second definition where a repo's `tickets/README.md` already has one. It may report the gap.
+2. **The Stop hook before the check command exists.** The template gets back the guard purser's has, in a generic form (exit 0 when the check command can't be run yet), and the hand-off says when the hook is installed. A repo scaffolded before its walking skeleton must not be blocked at every first stop.
+3. **Leftover hook-as-enforcer wording**, reworded to agree with the principle: `workspace-scaffold/SKILL.md` principle 2 and Step 3a, `assets/templates/REVIEW.md`'s first option, and `assets/skills/vet.md`'s "skip anything hooks already verify" (which must become: skip what the check command or CI verifies, and run the check command if nothing has).
+
+Should fix, all in this round:
+4. CI triggers: pull requests into the main branch **and** the production branch, and pushes to main when sessions push there (`project-kickoff/SKILL.md` Phase 6, `assets/brief.md`).
+5. `assets/brief.md` keeps a "binding limit and response" line beside the CI-minutes estimate.
+6. Pre-push: say plainly it is best-effort (it can be bypassed) and that CI's secrets scan is the backstop (`assets/trust.md`, `SKILL.md`).
+7. `stop-check.sh` takes one command; say so, and how to pass more than one.
+8. Step 4's "never rewrite one that exists" covers hooks as well as skills.
+9. The spec-reviewer and the escalation list are conditional on the unit of work being a ticket, in `SKILL.md` and `assets/trust.md` alike.
+10. The escalation triggers listed in `SKILL.md` and `assets/trust.md` agree; `spec-reviewer.md` doesn't promise a `/wrap` step the scaffold's `/wrap` lacks.
+11. `stop-check.sh`: a repo with no commits doesn't run the check forever for that reason alone; the check command is part of the fingerprint.
+12. `ticket.md`: committing `approved:` is conditional on the repo being git-tracked.
+
+Not in this round: migrating existing repos, and any new template.

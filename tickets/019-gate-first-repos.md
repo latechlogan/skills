@@ -10,7 +10,7 @@ created: 2026-11-26
 Change what the two setup skills prescribe so a new repo's enforcement sits at the gates (CI on the pull request, branch rules), not in every session and every push, and so the repo meets the factory's contract from day one.
 
 ## Context
-- **Parked on 2026-11-26** from a review of purser (`~/repos/purser`, the first repo built with both skills) while bringing factory-v2 (`~/repos/factory-v2`) into it. Not specced: write "Done looks like" when it's picked up. This is phase 5 of that plan; purser's own fixes were its tickets 012 and 015.
+- **Specced 2026-11-26** (the plan below is proposed, waiting on Logan). The work it waited on is done: factory-v2 ticket 021 wrote the contract (`~/repos/factory-v2/docs/design.md`, "What a target repo provides") and purser's tickets 012, 015 and 016 are the worked example. Parked the same day from a review of purser (`~/repos/purser`, the first repo built with both skills) while bringing factory-v2 (`~/repos/factory-v2`) into it. Not specced: write "Done looks like" when it's picked up. This is phase 5 of that plan; purser's own fixes were its tickets 012 and 015.
 - **What went wrong in purser, traced to these skills:**
   - `project-kickoff/SKILL.md` (Delivery, pre-push hook): "Mirrors CI by running the same check command. Local is the source of truth; CI is confirmation." Purser's pre-push ran the full check on every push. It fought spec stubs three times and blocked the factory, which pushes on every stage. Purser cut it to a secrets scan. The principle should be the reverse: CI and branch rules are the gate no session can skip; local hooks are a convenience.
   - `project-kickoff/SKILL.md` (Supply chain) and `references/quality-gates.md`: a dependency audit inside the check command. It fails for reasons unrelated to the change, blocked an unrelated ticket in purser, and would park every factory job. Purser moved it to a weekly workflow.
@@ -35,11 +35,58 @@ Change what the two setup skills prescribe so a new repo's enforcement sits at t
 `project-kickoff/SKILL.md`, `project-kickoff/references/quality-gates.md`, `project-kickoff/assets/trust.md` and `brief.md`, `workspace-scaffold/SKILL.md`, `project-kickoff/assets/reviewer.md` (018's question), `workspace-scaffold/assets/templates/` (hooks example, `tickets-README.md`), `workspace-scaffold/assets/skills/ticket.md`. Doesn't touch purser or factory-v2.
 
 ## Done looks like
-(To be written at pickup.)
+A repo kicked off and scaffolded from these skills comes out like purser is today, without the detours.
+
+**The principle, stated once.**
+1. `project-kickoff/SKILL.md` states the rule "a check blocks only someone who can fix it" and the three gates (what goes in: an approved ticket; what merges: CI running the check command on the pull request; what ships: branch rules). Hooks are named as feedback: optional, conditional, never the only thing enforcing a rule. The sentence "Local is the source of truth; CI is confirmation" is gone, and nothing else in either skill says hooks or pre-push "call" the check command as a gate.
+
+**project-kickoff, Phase 5 (trust) and Phase 6 (delivery).**
+2. The check command holds what a builder can fix: format, lint, typecheck, tests, the quality rules, a secrets scan. The dependency audit is a scheduled workflow, not part of it, with the reason given.
+3. A check that must hold (mutation testing, end-to-end tests, the axe run) is placed in the check command or a CI job on the pull request. `/vet` may run it earlier; `/vet` is never its only home.
+4. Pre-push is a secrets scan only. A Stop hook is optional and, if chosen, skips when nothing changed since its last green run.
+5. Phase 6 treats CI minutes as a design input for a CI-gated repo: superseded pull-request runs are cancelled, and the brief records an estimate of a month's runs against the plan's limit. The advice to keep heavy checks local "where minutes are free" is gone.
+6. Acceptance tests are frozen for their own ticket's build only; after that they are regression tests a later ticket may change when its Scope names the file and the change.
+7. A command guard, when a project needs one, is a script that blocks by default with named exceptions, and the docs call it best-effort. Not a regex in settings JSON.
+8. `assets/trust.md` links to the settings file instead of copying its JSON.
+9. **Factory-readiness is asked at kickoff** and logged like any other decision: will an agent pipeline build tickets here? If yes, the brief lists what the repo provides (one check command that CI also runs, a command that runs named test files, a setup command, CI on pull requests, no hook that blocks every push or stop). The skill names the factory and does not load its files.
+10. **The spec-reviewer** ships as `project-kickoff/assets/spec-reviewer.md`, in spec-only form: it reads the ticket and the project's escalation list in `docs/trust.md`, and returns approve, changes or escalate. Phase 7's hand-off table installs it.
+
+**Test integrity (ticket 018).**
+11. `references/quality-gates.md` has, per ecosystem it covers, the lint rule that fails a focused or disabled test, each checked against the tool's current docs, or "no tool; the reviewer carries it".
+12. `assets/trust.md` has the row; `assets/reviewer.md` asks about any removed or loosened assertion and treats it as must-explain, not an automatic failure.
+
+**workspace-scaffold (its shape changes in one place).**
+13. The ticket template, `tickets-README.md` and the core section of `SKILL.md` carry an `approved:` frontmatter field: empty until the plan is approved, then the date. It means the same in every repo, code or not: someone with the say approved this plan. The closed status list is unchanged.
+14. The scaffold's `/ticket` sets `approved:` when the user approves the plan. As an optional step, when `.claude/agents/spec-reviewer.md` exists it dispatches it first, sets the field on approve, and stops for the user on escalate.
+15. The Hooks section says a Stop hook is optional and conditional, and `assets/templates/` ships a `stop-check.sh` that takes the project's check command and skips when the tree and refs are unchanged since its last green run. `hooks-example.json` calls it.
 
 ## Boundary
-- Wait for factory-v2 ticket 021, which writes the contract down. The cloud run no longer holds this (Logan, 2026-11-26): the local pilot showed the integration, and the cloud run tests the cloud image.
-- workspace-scaffold is meant to stay stable (ROADMAP.md): keep its change to the Stop-hook template and wording, the `approved:` field, and the optional review step in `/ticket`.
+- **Existing repos are not migrated.** Purser already matches; factory-v2 and this repo are left alone.
+- **workspace-scaffold stays stable:** its change is criteria 13 to 15 and nothing else. The `approved:` field is a change to the shared shape, Logan's call, made on 2026-11-26.
+- **No skill loads another skill's or repo's files.** The factory's contract is restated in the brief's own words as five lines, with the factory named as the owner. That is a second copy of a fact; it is accepted because a skill folder has to stand alone, and criterion 9 keeps it to a list.
+- **Deleted assertions are a reviewer question, not a hard fail** (018's open boundary, decided here): legitimate deletions happen, and a later ticket may change a finished test.
+- Not in this ticket: a guard template (purser's is specific to its env files), and any change to `/vet` or `/wrap` in the scaffold.
 
-## Plan
-Not planned yet.
+## Plan (proposed)
+The pattern is the one purser ended on: **enforce at the boundary, give feedback inside it.** Alternatives not picked: keeping the full check in pre-push with an escape hatch (still blocks the wrong party, just less often), and making factory-readiness part of the scaffold (the scaffold serves repos with no code).
+
+1. **quality-gates.md first** (018, criterion 11): look up the focused/disabled-test rules in each ecosystem's current docs. Everything later cites this file.
+2. **project-kickoff/SKILL.md:** add the principle (1), then rewrite the Phase 5 paragraphs for the check command, mechanical versus judgment, supply chain, UI gates, mutation testing and acceptance criteria (2, 3, 6, 7, 11), Phase 6's CI and pre-push paragraphs (4, 5), the factory-readiness question (9), and Phase 7's hand-off table (hooks optional; the spec-reviewer row).
+3. **Assets:** `trust.md` (2, 3, 4, 6, 8, 12), `brief.md` (5, 9), `reviewer.md` (12), new `spec-reviewer.md` (10), generalised from purser's with its project words removed.
+4. **workspace-scaffold:** the `approved:` field in three places (13), `/ticket` (14), the Hooks wording and the `stop-check.sh` template generalised from purser's (15). Ask the three template questions from CLAUDE.md for each.
+5. **Check both sides of the hand-off** in one read: every row of Phase 7's table has a target that exists in the scaffold, and nothing the scaffold installs is unmentioned.
+6. Two DECISIONS.md lines: the principle, and `approved:` entering the shape. `/vet`.
+
+**Verification** (this repo has no tests, so each check is a named read or a real run):
+- **A scratch repo, scaffolded for real.** In a throwaway directory with a tiny Node project and a CI workflow, a subagent follows the new workspace-scaffold from cold. Then factory-v2's `install.py` runs against it: the only contract warning allowed is "no ticket carries `approved:`", and it clears after the scratch `/ticket` approves one. This is the test that the two skills and the factory agree.
+- **The Stop-hook template, run for real** in that repo: green run writes its stamp, an unchanged tree skips, an edited file runs again, a red run is retried.
+- **A cold read.** A subagent given only the new `project-kickoff` text answers six questions drawn from purser's clashes (where does the audit run; what does pre-push run; where does mutation testing run for factory-built work; what does a Stop hook do in a session that changed nothing; when may a finished ticket's test change; who sets `approved:`). Each answer must match purser today.
+- **Phrase check:** `grep` finds none of "source of truth; CI is confirmation", "where minutes are free", "pre-push calls it".
+- `/vet` against this repo's REVIEW.md.
+
+**What these checks won't catch:**
+- **No real kickoff is run.** project-kickoff's true test is a conversation about a new project, and the cold read only shows the text is unambiguous on six points. The first real kickoff after this is the test; expect a follow-up ticket from it.
+- **Only the Node rows of quality-gates.md are exercised.** The other ecosystems' rules are checked against docs, not run.
+- **The scratch repo is tiny.** It can't show whether the Stop-hook template's fingerprint holds on a repo with submodules, large untracked trees or unusual ref layouts.
+- **The contract is copied as five lines** into the brief. If the factory's contract changes, nothing here notices.
+

@@ -14,6 +14,7 @@ On 2026-11-06 the global `~/.claude/CLAUDE.md` gained the principle "Never weake
 
 The current trust layer doesn't cover it. `project-kickoff/assets/reviewer.md` item 2 catches tautological tests. Mutation testing catches tests that are too weak, but not a test rewritten to assert the wrong behavior. Nothing in `project-kickoff/references/quality-gates.md` or `project-kickoff/assets/trust.md` flags focused or disabled tests, or a net loss of assertions.
 
+- **2026-11-26:** specced inside ticket 019 (its criteria 11 and 12, and the Boundary line on deleted assertions). Built and closed with it.
 - **2026-11-26:** to be built together with ticket 019 (gate-first repos): same four files, and the lint rules land in the check command that 019 re-homes at the CI gate.
 
 ## Scope

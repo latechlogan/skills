@@ -51,5 +51,5 @@ approve | changes | escalate
 
 ## Summary line
 approved: NNN — <title>, <N> criteria
-<approve only; /wrap can list it so {{OWNER}} can veto without reading the spec>
+<approve only; one line {{OWNER}} can scan to veto without reading the spec>
 ```

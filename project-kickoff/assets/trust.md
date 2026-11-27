@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} — Trust layer
 
-<!-- Written by project-kickoff, Phase 5. Read when writing a unit of work, writing tests, adding a check, or deciding whether green means done. /ticket reads the escalation list and dispatches the spec-reviewer; /vet reads this and dispatches the reviewer. -->
+<!-- Written by project-kickoff, Phase 5. Read when writing a unit of work, writing tests, adding a check, or deciding whether green means done. When the unit of work is a ticket, /ticket reads the escalation list and dispatches the spec-reviewer; /vet reads this and dispatches the reviewer. -->
 
 ## What green means here
 
@@ -33,7 +33,7 @@ A check blocks only someone who can fix it. Three gates hold, and no session can
 | Gate | Runs | Holds |
 |---|---|---|
 | Approved {{UNIT_OF_WORK}} | {{HOW_APPROVAL_IS_RECORDED — e.g. a non-empty `approved:` on the ticket}} | What goes in |
-| CI (`{{WORKFLOW_PATH}}`) | `{{CHECK_COMMAND}}` on every pull request into `{{MAIN_BRANCH}}`, superseded runs cancelled{{IF_SLOW_CHECKS: ; plus {{SLOW_CHECK_JOBS — e.g. mutation testing on pull requests touching `src/core/`}}}} | What merges |
+| CI (`{{WORKFLOW_PATH}}`) | `{{CHECK_COMMAND}}` on the pull requests and pushes `docs/brief.md` `## Delivery` names, superseded pull-request runs cancelled{{IF_SLOW_CHECKS: ; plus {{SLOW_CHECK_JOBS — e.g. mutation testing on pull requests touching `src/core/`}}}} | What merges |
 | Branch rules | `{{PRODUCTION_BRANCH}}` takes only a pull request with CI green; no force-push or delete | What ships |
 
 A check that must hold is in the check command or a CI job on the pull request. `/vet` may run a slow one earlier in a hands-on session; it is never the only place one runs.
@@ -46,7 +46,7 @@ A check that must hold is in the check command or a CI job on the pull request. 
 
 - PostToolUse on Edit|Write: `{{FORMATTER}}`
 - Stop (optional): `{{CHECK_COMMAND_OR_FAST_SUBSET}}`, skipped when nothing changed since its last green run
-- Pre-push: the secrets scan only (`{{SCANNER}}`). A pushed secret is the one thing a later check can't undo
+- Pre-push: the secrets scan only (`{{SCANNER}}`). A pushed secret is the one thing a later check can't undo. It is best-effort, skipped by `--no-verify` or a clone without the hook set up, so the check command's secrets scan in CI is the backstop: it can't unpush a secret, but it flags one to rotate
 
 **Judgment (REVIEW.md):**
 
@@ -107,12 +107,14 @@ CLAUDE.md's Permissions say "ask first"; this is the enforced form, and it keeps
 
 ## Escalation list
 
+<!-- Only when the unit of work is a ticket. Otherwise delete this section and the spec-reviewer line under The reviewers. -->
+
 The spec-reviewer must escalate to the user, rather than approve, if a {{UNIT_OF_WORK}} does any of these:
 
 - {{TRIGGER — e.g. changes a port, a module's interface, the module map, or the placement table in `docs/architecture.md`}}
 - {{TRIGGER — e.g. changes the schema}}
 - {{TRIGGER — e.g. adds a dependency not in the stack table in `docs/brief.md`}}
-- {{TRIGGER — e.g. contradicts or changes a logged decision}}
+- {{TRIGGER — e.g. contradicts or changes a logged decision or a core rule}}
 - {{TRIGGER — e.g. goes beyond the brief's Done looks like, or touches Explicitly out of scope, a must-never item, or a protected path}}
 - Still isn't approved after two rounds
 
@@ -122,7 +124,7 @@ The list is mechanical so the reviewer never weighs whether a change "really mat
 
 Independent agents, each with its own context. Neither reads the conversation that produced the work — that separation is the point.
 
-- **`.claude/agents/spec-reviewer.md`**, before the build, on the {{UNIT_OF_WORK}} alone: does it faithfully and checkably implement the docs, and does it hit the escalation list? It returns approve, changes, or escalate; `/ticket` sets `approved:` on approve.
+- **`.claude/agents/spec-reviewer.md`** (when the unit of work is a ticket), before the build, on the {{UNIT_OF_WORK}} alone: does it faithfully and checkably implement the docs, and does it hit the escalation list? It returns approve, changes, or escalate; `/ticket` sets `approved:` on approve.
 - **`.claude/agents/reviewer.md`**, after the build: it receives the {{UNIT_OF_WORK}} and the diff, reads this file and REVIEW.md, runs the check command, and reports must fix / should fix / fine.
 
 ## For /vet

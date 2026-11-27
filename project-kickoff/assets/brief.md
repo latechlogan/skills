@@ -63,8 +63,9 @@
 
 - **Deploy path:** {{PUSH_TO_MAIN_OR_TAG_OR_MANUAL}}
 - **Rollback:** {{HOW}}
-- **CI runs:** the check command (`{{CHECK_COMMAND}}`) on every pull request into `{{MAIN_BRANCH}}`{{IF_SLOW_CHECKS: , plus {{SLOW_CHECK_JOBS}}}}; superseded pull-request runs are cancelled
+- **CI runs:** the check command (`{{CHECK_COMMAND}}`){{IF_SLOW_CHECKS: , plus {{SLOW_CHECK_JOBS}},}} on every pull request into `{{MAIN_BRANCH}}`{{IF_SEPARATE_PRODUCTION_BRANCH: and `{{PRODUCTION_BRANCH}}`}}{{IF_SESSIONS_PUSH_TO_MAIN: , and on every push to `{{MAIN_BRANCH}}`}}; superseded pull-request runs are cancelled, runs on `{{MAIN_BRANCH}}` never
 - **CI minutes:** {{LIMIT_OR_UNLIMITED}}; a month estimated at {{RUNS_PER_UNIT}} runs × {{UNITS_PER_MONTH}} units × {{MINUTES_PER_RUN}} min = {{TOTAL}} min against it
+- **Binding limit and response:** {{WHICH_LIMIT_BINDS — CI minutes, or another such as deploy credits or an API quota}}; {{DESIGN_RESPONSE}}
 - **Branch rules:** `{{PRODUCTION_BRANCH}}` takes only a pull request with CI green (user switches them on in repo settings)
 - **Pre-push:** the secrets scan only (`{{SCANNER}}`)
 - **Dependency audit:** weekly scheduled workflow, not in the check command

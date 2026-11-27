@@ -1,6 +1,6 @@
 # Review standards
 
-Judgment checks only — {{"lint, types, tests, and build are enforced by hooks and are not repeated here" OR "there is nothing mechanical to verify in this repo, so this file is the whole review surface"}}. Sort findings into **must fix / should fix / fine as is**.
+Judgment checks only — {{"lint, types, tests, and build are verified by the check command (CLAUDE.md `## Commands`) and are not repeated here" OR "there is nothing mechanical to verify in this repo, so this file is the whole review surface"}}. Sort findings into **must fix / should fix / fine as is**.
 
 ## Scope and intent
 - Does the change match its {{UNIT_OF_WORK — ticket / research question / …}} and ROADMAP.md's current cycle? If ROADMAP.md's date is stale, flag that before reviewing against it.

@@ -1,5 +1,5 @@
 {
-  "_comment": "Shape for .claude/settings.json hooks \u2014 mechanical checks that run automatically so REVIEW.md never has to ask about them. ADAPT the commands to the project's actual tooling, and ALWAYS get user approval before writing this file, since hooks execute shell commands. SessionStart prints the residue so a session never starts green \u2014 safe to offer every project. Hooks receive JSON on stdin (the edited file is .tool_input.file_path). The Stop hook is optional: stop-check.sh (copy it to .claude/hooks/) runs the check command given as its arguments, skips when nothing changed since its last green run, and blocks (exit 2) for one correction round only. Verified against https://code.claude.com/docs/en/hooks on 2026-08-26; re-check if anything looks off.",
+  "_comment": "Shape for .claude/settings.json hooks \u2014 mechanical checks that run automatically so REVIEW.md never has to ask about them. ADAPT the commands to the project's actual tooling, and ALWAYS get user approval before writing this file, since hooks execute shell commands. SessionStart prints the residue so a session never starts green \u2014 safe to offer every project. Hooks receive JSON on stdin (the edited file is .tool_input.file_path). The Stop hook is optional: stop-check.sh (copy it to .claude/hooks/) runs the one check command given as its arguments, stays quiet until the --requires path exists (here, until the walking skeleton writes package.json), skips when nothing changed since its last green run, and blocks (exit 2) for one correction round only. Its header says how to pass more than one command. Verified against https://code.claude.com/docs/en/hooks on 2026-08-26; re-check if anything looks off.",
   "hooks": {
     "SessionStart": [
       {
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-check.sh npm run check --silent"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-check.sh --requires package.json npm run check --silent"
           }
         ]
       }

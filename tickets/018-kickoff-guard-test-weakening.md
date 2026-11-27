@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 created: 2026-11-06
 source: request
 ---
@@ -43,3 +43,5 @@ The hand-off side: Phase 7 already maps `trust.md` mechanical checks to hooks an
 
 ## Outcome
 Built inside ticket 019 on 2026-11-26 (its criteria 11 and 12). `references/quality-gates.md` has a focused/disabled-test row per ecosystem, checked against current docs: the vitest, jest and playwright eslint plugins (set to error explicitly, because the recommended configs ship the disabled-test rules at warn), ruff's `TID251` banned-api for pytest and unittest skips (verified by a run with ruff 0.17.6), golangci-lint's `forbidigo` and ginkgolinter for Go, and "no tool; the reviewer carries it" for Rust (`clippy::ignore_without_reason` only requires a reason). `assets/trust.md` has the row, SKILL.md Phase 5 has the Test integrity concern, and `assets/reviewer.md` item 3 treats a removed or loosened assertion as must-explain, not an automatic failure. The plan's retrofit of one real repo didn't happen: no existing repo is migrated, and purser already has its own `scripts/check-tests.mjs`. `hooks-example.json` needed no new shape for this.
+
+- **Closed 2026-11-26** with ticket 019.

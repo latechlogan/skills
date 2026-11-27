@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 kind: improvement
 created: 2026-11-26
 ---
@@ -120,3 +120,5 @@ Should fix, all in this round:
 12. `ticket.md`: committing `approved:` is conditional on the repo being git-tracked.
 
 Not in this round: migrating existing repos, and any new template.
+
+- **Closed 2026-11-26.** Final `/vet`: clear. Its three remaining wording notes were applied as their own commit (Phase 7's row, principle 7's guard exception, `trust.md`'s delete instruction). Not verified by a real kickoff: the first one is the test.

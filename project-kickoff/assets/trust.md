@@ -107,7 +107,7 @@ CLAUDE.md's Permissions say "ask first"; this is the enforced form, and it keeps
 
 ## Escalation list
 
-<!-- Only when the unit of work is a ticket. Otherwise delete this section and the spec-reviewer line under The reviewers. -->
+<!-- Only when the unit of work is a ticket. Otherwise delete this section and the spec-reviewer line under The reviewers, and reword that section's opening for one reviewer. -->
 
 The spec-reviewer must escalate to the user, rather than approve, if a {{UNIT_OF_WORK}} does any of these:
 

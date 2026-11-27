@@ -90,3 +90,11 @@ The pattern is the one purser ended on: **enforce at the boundary, give feedback
 - **The scratch repo is tiny.** It can't show whether the Stop-hook template's fingerprint holds on a repo with submodules, large untracked trees or unusual ref layouts.
 - **The contract is copied as five lines** into the brief. If the factory's contract changes, nothing here notices.
 
+
+## Outcome
+Built as planned on 2026-11-26; awaiting the main session's cold read and /vet. Plan steps 1 to 5 are done; step 6's DECISIONS.md lines are written. Where it differs from the plan or the criteria's wording:
+- **The spec-reviewer is written in Phase 5**, beside the reviewer, and Phase 7's table has a row for it ("already in place; the scaffold's `/ticket` dispatches it"). That matches how `reviewer.md` is handled.
+- **The Stop-hook template takes the check command as its arguments** (`stop-check.sh npm run check --silent`), so the command lives in `settings.json` and the script carries no placeholder. Purser's fingerprint is kept unchanged. Its header adds one pitfall: files the check writes must be gitignored, or the skip never fires.
+- **Phase 7 got one sentence** naming what the scaffold installs with no kickoff input (`/wrap`, `/ticket` and its README, the SessionStart hook), so the hand-off check in step 5 has nothing unmentioned.
+- **Verification run:** a scratch Node repo was scaffolded from the new text and factory-v2's `install.py` was run against it. The only contract warning was "no ticket carries `approved:`", and it cleared after a scratch ticket was approved through the scaffolded `/ticket`. A secrets-only pre-push drew no warning either. The Stop hook was run for real: a green run wrote the stamp, an unchanged tree skipped, an edited file ran again, a red run was retried, and a tag-only change ran it again. The phrase grep finds none of the three phrases.
+- **Left alone, outside criteria 13 to 15:** workspace-scaffold's principle 2 and Step 3a still say mechanical checks "go in hooks", and the REVIEW.md template still says checks are "enforced by hooks". They now sit awkwardly with "hooks are feedback". This repo's own `tickets/README.md`, which mirrors the template, has no `## Approved` section.

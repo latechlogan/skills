@@ -21,6 +21,10 @@ A ticket is where something surfaced now gets parked for later with its context 
 
 **The list is closed because other workspaces read `status` without knowing this repo.** A seventh word invented here is one only this repo understands. If one is genuinely needed, it's a change to the shared shape and is made in the workspace-scaffold skill's source repo (`skills`), not here.
 
+## Approved
+
+`approved:` in the frontmatter is empty until someone with the say approves the ticket's plan, then holds that date (`approved: 2026-11-26`). It means the same in every repo: this plan was approved. Other workspaces and tools read it — an agent pipeline's pickup refuses a ticket without it — so don't reuse it for anything else. It is not a status: a ticket can be `open` and approved, waiting to be picked up.
+
 ## Kind
 
 `kind: defect | improvement` is what makes ROADMAP.md's triage rule mechanical: defects jump the queue, improvements are ordered by leverage, and the ticket number is creation order — never priority.

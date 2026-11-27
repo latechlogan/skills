@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} — Trust layer
 
-<!-- Written by project-kickoff, Phase 5. Read when writing tests, adding a check, or deciding whether green means done. /vet reads this and dispatches the reviewer. -->
+<!-- Written by project-kickoff, Phase 5. Read when writing a unit of work, writing tests, adding a check, or deciding whether green means done. /ticket reads the escalation list and dispatches the spec-reviewer; /vet reads this and dispatches the reviewer. -->
 
 ## What green means here
 
@@ -10,28 +10,43 @@ Passing checks mean the code does what the acceptance criteria say and nothing m
 
 Every {{UNIT_OF_WORK}} carries a `## Done looks like` section written as checkable statements, approved by the user before implementation starts. Tests are named after the criteria they prove ({{NAMING_CONVENTION_EXAMPLE}}). A test that doesn't trace to a criterion is either a regression guard for a logged learning or a candidate for deletion.
 
+A {{UNIT_OF_WORK}}'s acceptance tests are frozen while it is being built: a builder that finds one wrong stops and says so. Once it is done they are regression tests, and a later {{UNIT_OF_WORK}} may change one only when its Scope names the file and the change.
+
 ## Test layers
 
 | Layer | Exists | Protects against | Runs in |
 |---|---|---|---|
 | Unit | {{YES_NO}} | {{FAILURE_MODE}} | check command |
 | Integration | {{YES_NO}} | {{FAILURE_MODE}} | check command |
-| End to end | {{YES_NO}} | {{FAILURE_MODE}} | {{CHECK_OR_VET_OR_CI_ONLY}} |
+| End to end | {{YES_NO}} | {{FAILURE_MODE}} | {{CHECK_COMMAND_OR_CI_JOB}} |
 
 Tests run against {{FIXTURES_FROM_DATA_MODEL}}; see `docs/data-model.md`.
 
 ## The check command
 
-`{{CHECK_COMMAND}}` runs, in order: format check, lint, typecheck, tests, secrets scan ({{SCANNER}}). Everything that gates work calls this and nothing else — hooks, pre-push, CI. If a check isn't in here, it isn't enforced.
+`{{CHECK_COMMAND}}` runs, in order: format check, lint (with the test-integrity and code-quality rules), typecheck, tests, secrets scan ({{SCANNER}}). It holds what a builder can fix and nothing else.
 
-{{IF_SLOW}}: the full suite is slow, so the Stop hook runs `{{FAST_SUBSET_COMMAND}}` (format, lint, typecheck) and `/vet` and pre-push run the full check.
+## Where the checks run
+
+A check blocks only someone who can fix it. Three gates hold, and no session can skip them; everything else is feedback.
+
+| Gate | Runs | Holds |
+|---|---|---|
+| Approved {{UNIT_OF_WORK}} | {{HOW_APPROVAL_IS_RECORDED — e.g. a non-empty `approved:` on the ticket}} | What goes in |
+| CI (`{{WORKFLOW_PATH}}`) | `{{CHECK_COMMAND}}` on every pull request into `{{MAIN_BRANCH}}`, superseded runs cancelled{{IF_SLOW_CHECKS: ; plus {{SLOW_CHECK_JOBS — e.g. mutation testing on pull requests touching `src/core/`}}}} | What merges |
+| Branch rules | `{{PRODUCTION_BRANCH}}` takes only a pull request with CI green; no force-push or delete | What ships |
+
+A check that must hold is in the check command or a CI job on the pull request. `/vet` may run a slow one earlier in a hands-on session; it is never the only place one runs.
+
+**Scheduled, not gating:** the dependency audit (`{{AUDIT_COMMAND — e.g. npm audit --audit-level=high}}`) runs weekly in `{{AUDIT_WORKFLOW_PATH}}`. It is not in the check command: a new advisory fails for reasons unrelated to the change being checked, and the builder may not be allowed to edit the dependencies. A failed run reaches the user.
 
 ## Mechanical vs judgment
 
-**Mechanical (hooks, at scaffold time):**
+**Mechanical (the check command, which CI runs).** Hooks add feedback on top, and nothing depends on them holding:
 
 - PostToolUse on Edit|Write: `{{FORMATTER}}`
-- Stop: `{{FAST_CHECK_OR_FULL_CHECK}} || exit 2`
+- Stop (optional): `{{CHECK_COMMAND_OR_FAST_SUBSET}}`, skipped when nothing changed since its last green run
+- Pre-push: the secrets scan only (`{{SCANNER}}`). A pushed secret is the one thing a later check can't undo
 
 **Judgment (REVIEW.md):**
 
@@ -52,12 +67,12 @@ Same split. A check that isn't in `{{CHECK_COMMAND}}` isn't enforced; a question
 | Duplication | {{JSCPD}} | {{ZERO_NEW_OR_BASELINE}} |
 | Layering — the arrows in `docs/architecture.md` | {{DEPCRUISE_OR_IMPORT_LINTER}} | error |
 | Name shape | {{NAMING_RULE}} | error |
-| Dependency advisories | {{AUDIT_COMMAND — e.g. `pnpm audit --audit-level=high`}} | high |
+| Focused or disabled tests | {{TEST_LINT_RULES — e.g. `vitest/no-focused-tests`, `vitest/no-disabled-tests`}} | error |
 {{IF_UI: | Accessibility, at source | {{A11Y_LINT — e.g. eslint-plugin-jsx-a11y}} | error |
-| Accessibility, built pages | {{AXE_OR_PA11Y}} — {{IN_CHECK_OR_IN_E2E_FROM_VET}} | WCAG 2.1 AA, 0 violations |
+| Accessibility, built pages | {{AXE_OR_PA11Y}} — {{IN_CHECK_OR_IN_A_CI_JOB}} | WCAG 2.1 AA, 0 violations |
 | Bundle size | `size-limit` | {{KB}} per entry |}}
 
-{{ROWS_WITH_NO_TOOL — "Every row has a tool" or "No tool for X in this ecosystem; the reviewer carries it"}}
+{{ROWS_WITH_NO_TOOL — "Every row has a tool" or "No tool for X in this ecosystem; the reviewer carries it"}} A removed or loosened assertion has no tool anywhere: the reviewer treats it as must-explain.
 {{IF_NO_UI: UI gates skipped: no UI in v1. Revisit if the UI plan in `docs/architecture.md` is built.}}
 
 Thresholds are tripwires, not targets: these are starting values, logged as decisions, moved once the first slices land.
@@ -81,32 +96,34 @@ The agent never reads or edits these, in any session:
 - {{PATH — e.g. `secrets/`}}
 - {{PATH — e.g. production migrations, a directory of real data}}
 
-CLAUDE.md's Permissions say "ask first"; this is the enforced form, and it keeps a secret out of the session transcript as well as the repo. At scaffold time the list becomes two entries in `.claude/settings.json` (user approves — hooks run shell commands). A deny rule on Read does not stop `cat .env`, hence the Bash hook:
+CLAUDE.md's Permissions say "ask first"; this is the enforced form, and it keeps a secret out of the session transcript as well as the repo. Two things enforce it, both in [`.claude/settings.json`](../.claude/settings.json) (user approves — hooks run shell commands); that file is their one home, so it isn't copied here:
 
-```json
-{
-  "permissions": {
-    "deny": ["Read(./.env)", "Read(./.env.*)", "Edit(./.env)", "Edit(./.env.*)", "Read(./{{SECRETS_DIR}}/**)", "Edit(./{{SECRETS_DIR}}/**)"]
-  },
-  "hooks": {
-    "PreToolUse": [{
-      "matcher": "Bash",
-      "hooks": [{
-        "type": "command",
-        "command": "jq -r '.tool_input.command' | grep -Eq '{{PATH_PATTERN — e.g. \\.env|secrets/}}' && { echo 'blocked: protected path, see docs/trust.md' >&2; exit 2; } || exit 0"
-      }]
-    }]
-  }
-}
-```
+- `permissions.deny` entries keep the Read and Edit tools off these paths.
+- A PreToolUse guard on Bash, `{{GUARD_SCRIPT — e.g. .claude/hooks/bash-guard.sh}}`, because a deny rule on Read does not stop `cat` on the same file. It blocks every mention of a protected path by default, with a short named list of exceptions ({{EXCEPTIONS}}). It is best-effort: it catches accidents in command text, and a command can reach a file without naming it.
 
 ## Mutation testing
 
-{{ENABLED_OR_SKIPPED}} — {{REASON}}. {{IF_ENABLED: Tool: `{{STRYKER_OR_MUTMUT}}`; scope: `{{CORE_PATHS}}`; threshold: {{PERCENT}}; runs via `{{COMMAND}}` from /vet, not the Stop hook.}}
+{{ENABLED_OR_SKIPPED}} — {{REASON}}. {{IF_ENABLED: Tool: `{{STRYKER_OR_MUTMUT}}`; scope: `{{CORE_PATHS}}`; threshold: {{PERCENT}}; runs as a CI job on pull requests that touch `{{CORE_PATHS}}` (`{{COMMAND}}`). `/vet` may run it earlier; never the Stop hook.}}
 
-## The reviewer
+## Escalation list
 
-`.claude/agents/reviewer.md` is an independent agent with its own context. It receives the unit of work and the diff, reads this file and REVIEW.md, runs the check command, and reports must fix / should fix / fine. It never reads the conversation that produced the code — that separation is the point.
+The spec-reviewer must escalate to the user, rather than approve, if a {{UNIT_OF_WORK}} does any of these:
+
+- {{TRIGGER — e.g. changes a port, a module's interface, the module map, or the placement table in `docs/architecture.md`}}
+- {{TRIGGER — e.g. changes the schema}}
+- {{TRIGGER — e.g. adds a dependency not in the stack table in `docs/brief.md`}}
+- {{TRIGGER — e.g. contradicts or changes a logged decision}}
+- {{TRIGGER — e.g. goes beyond the brief's Done looks like, or touches Explicitly out of scope, a must-never item, or a protected path}}
+- Still isn't approved after two rounds
+
+The list is mechanical so the reviewer never weighs whether a change "really matters".
+
+## The reviewers
+
+Independent agents, each with its own context. Neither reads the conversation that produced the work — that separation is the point.
+
+- **`.claude/agents/spec-reviewer.md`**, before the build, on the {{UNIT_OF_WORK}} alone: does it faithfully and checkably implement the docs, and does it hit the escalation list? It returns approve, changes, or escalate; `/ticket` sets `approved:` on approve.
+- **`.claude/agents/reviewer.md`**, after the build: it receives the {{UNIT_OF_WORK}} and the diff, reads this file and REVIEW.md, runs the check command, and reports must fix / should fix / fine.
 
 ## For /vet
 

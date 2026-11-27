@@ -1,12 +1,12 @@
 # Quality gates
 
-What "clean code" means when a machine can check it, by ecosystem — plus the supply-chain rows, the rows a UI switches on, and what is deferred. Read in Phase 2 (pick the tools with the stack) and Phase 5 (put them in the check command with thresholds). The judgment half — names that say the right thing, functions that do one thing, comments that say why — lives in `assets/trust.md` `## Code quality` and goes to the reviewer. Nothing here duplicates it.
+What "clean code" means when a machine can check it, by ecosystem — plus the test-integrity rows, the supply-chain rows, the rows a UI switches on, and what is deferred. Read in Phase 2 (pick the tools with the stack) and Phase 5 (put them in the check command with thresholds). The judgment half — names that say the right thing, functions that do one thing, comments that say why — lives in `assets/trust.md` `## Code quality` and goes to the reviewer. Nothing here duplicates it.
 
 Why this file exists: agents write more code than the job needs, reuse less of what already exists, and almost never tidy on their own. In one 2026 study of 1.38M agent commits, readability-motivated commits were 0.3% of the total, and even those raised complexity in 43% of cases. PR-level studies find more clones and more dead code than in human PRs. A paragraph asking for clean code is the weakest lever available; a gate that fails is the strongest.
 
 Rules for using it:
 
-- Every row the ecosystem can check goes in the check command. If it isn't in the check command it isn't enforced.
+- Every row the ecosystem can check goes in the check command, which CI runs on every pull request. If it isn't in the check command or a CI job on the pull request, it isn't enforced. The one exception is a check that fails for reasons outside the change, the dependency audit: it runs on a schedule (`## Supply chain`).
 - **Thresholds are tripwires, not targets.** Start at the tool's default or the number here, log it as a decision, and move it after the first slices land. A threshold set too tight on day one teaches everyone to ignore it — the same rule Phase 5 applies to mutation score.
 - One tool per property. When two see the same thing (tsc's `noUnusedLocals` and eslint's `no-unused-vars`) pick one; the typescript-eslint maintainers recommend the lint rule because it can ignore `_`-prefixed names and catch unused catch bindings.
 - Layering rules are written from Phase 4's placement table: one forbidden rule per arrow the table forbids.
@@ -27,6 +27,7 @@ Rules for using it:
 | Name shape (case, prefixes) | eslint via typescript-eslint | `@typescript-eslint/naming-convention` | camelCase / PascalCase / UPPER_CASE by kind | Syntax only. Whether the name says the right thing is judgment |
 | Commented-out code | none reliable | — | — | Judgment; the reviewer greps the diff for `^\s*//\s*(const|let|if|return|import|export)` |
 | Formatting | prettier | `prettier --check .` | — | The PostToolUse hook runs `--write` on the touched file |
+| Focused or disabled tests | the test runner's eslint plugin: `@vitest/eslint-plugin`, `eslint-plugin-jest`, `eslint-plugin-playwright` | `vitest/no-focused-tests` and `vitest/no-disabled-tests`; `jest/no-focused-tests` and `jest/no-disabled-tests`; `playwright/no-focused-test` and `playwright/no-skipped-test` | error, set explicitly | The recommended configs ship the disabled-test rules at warn, and a warning doesn't fail the check command. `.only` or `.skip` turns a suite green without running all of it |
 
 ## Python
 
@@ -41,18 +42,26 @@ Rules for using it:
 | Duplication | jscpd | as above | 0% new | |
 | Name shape | ruff | `N` (pep8-naming) | error | |
 | Formatting | ruff | `ruff format --check` | — | |
+| Skipped tests | ruff | `TID251` (banned-api): ban `pytest.mark.skip`, `pytest.skip` and `unittest.skip` under `[tool.ruff.lint.flake8-tidy-imports.banned-api]` | error | It flags uses, not only imports. pytest has no focus marker (selection happens on the command line), so skips are the whole row. Add `pytest.mark.xfail` if expected failures shouldn't land either |
 
 ## Other ecosystems
 
 Fill the same rows. Every mainstream ecosystem has a tool for unused code, complexity, and duplication (Go: `staticcheck`, `gocyclo`, `dupl`; Rust: rustc's dead-code lints and `clippy::cognitive_complexity`). Say in `docs/trust.md` which rows have no tool.
 
+Focused or disabled tests, where the tools are thinner:
+
+- **Go:** the standard `testing` package has no focus. For skips, golangci-lint's `forbidigo` with `analyze-types: true` and a pattern such as `^testing\.(T|B|F|TB)\.Skip(f|Now)?$`. Ginkgo's focus containers (`FIt`, `FDescribe`): ginkgolinter's `forbid-focus-container: true`.
+- **Rust:** no focus. No lint bans `#[ignore]`; `clippy::ignore_without_reason` (pedantic, run with `--all-targets`) only requires a reason. No tool; the reviewer carries it.
+
+A removed or loosened assertion has no tool in any ecosystem. The reviewer carries it.
+
 ## Supply chain
 
-Agents add packages where a person would write ten lines, and sometimes name packages that don't exist but sound right; attackers register those names. Everything here fires on a signal, not a calendar.
+Agents add packages where a person would write ten lines, and sometimes name packages that don't exist but sound right; attackers register those names. Everything here flags only when something is wrong: the weekly audit runs on a calendar but stays silent until an advisory lands.
 
 | Property | Tool | Rule or flag | Fires when | Notes |
 |---|---|---|---|---|
-| Known advisories, in session | `pnpm audit` / `npm audit` / `pip-audit` | `--audit-level=high` in the check command | An advisory lands on a dependency, transitive included | The Stop hook has the agent bump the package; the user decides only when no patched version exists. `high` keeps low and moderate findings from blocking unrelated work |
+| Known advisories, on a schedule | `pnpm audit` / `npm audit` / `pip-audit` | `--audit-level=high` in a weekly scheduled workflow, also runnable by hand | An advisory lands on a dependency, transitive included | Not in the check command (Phase 5's Supply chain says why). A failed run reaches the user as the CI provider's email; the cost is up to a week's delay. `high` keeps low and moderate findings out |
 | Known advisories, between sessions | Dependabot security updates | Repo Settings → Code security, one toggle | Same advisory, caught when nobody is working | Opens one PR per advisory and nothing else. The agent cannot switch it on; the hand-off names it as the user's |
 | A new dependency is what it claims | the reviewer | `npm view <name> time.created`, weekly downloads, exact name | A dependency is added, which is already ask-first | Published in the last few weeks with few users is a must-fix; no stated reason is a should-fix |
 
@@ -63,7 +72,7 @@ Switched on by Phase 4's "built in v1" decision, regardless of who uses it: the 
 | Property | Tool | Rule or flag | Runs in | Notes |
 |---|---|---|---|---|
 | Accessibility, at source | `eslint-plugin-jsx-a11y` (React); `eslint-plugin-astro` `flat/jsx-a11y-recommended` (Astro) | recommended config, error | check command; PostToolUse feedback on save | Catches the agent classics before the file is saved: `<div onClick>`, an icon button with no name, an input with no label |
-| Accessibility, built pages | `pa11y-ci` or `@axe-core/cli`; `@axe-core/playwright` inside an end-to-end test | WCAG 2.1 AA, zero violations | Check command for a static build (file paths into `dist/`); the end-to-end layer from `/vet` when it needs a running server | Axe's own count is roughly half of real issues by volume. Colour contrast on a chosen palette is the one finding the agent should not fix alone |
+| Accessibility, built pages | `pa11y-ci` or `@axe-core/cli`; `@axe-core/playwright` inside an end-to-end test | WCAG 2.1 AA, zero violations | Check command for a static build (file paths into `dist/`); the end-to-end layer, in a CI job on the pull request, when it needs a running server | Axe's own count is roughly half of real issues by volume. Colour contrast on a chosen palette is the one finding the agent should not fix alone |
 | Bundle size | `size-limit` | one limit per entry in `package.json`; start at current size + 10% | check command | Agents add dependencies; a ceiling makes it visible. Raising the limit is a logged decision |
 
 Judgment half, when anyone but the user uses it: a keyboard-only walk of the main flow at each milestone, and the reviewer's question — does every new interactive element have a name, a role, and a visible focus state.
@@ -78,4 +87,4 @@ Each fires on a calendar or needs tuning, so it fails the "runs quietly and flag
 | License checker | Fails on a disallowed licence | Matters for a company shipping a product; not for public solo repos | Anyone but the user redistributes the code |
 | Lighthouse CI | Performance and best-practice scores | Scores flicker run to run, thresholds need tuning, needs a running server | Hosting runs it for free, or a UI has users on slow connections |
 
-Verified against the tools' documentation on 2026-09-22. Re-check defaults when a major version lands.
+Verified against the tools' documentation on 2026-09-22; the focused and disabled test rules on 2026-11-26. Re-check defaults when a major version lands.

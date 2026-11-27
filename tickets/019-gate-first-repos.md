@@ -10,7 +10,7 @@ created: 2026-11-26
 Change what the two setup skills prescribe so a new repo's enforcement sits at the gates (CI on the pull request, branch rules), not in every session and every push, and so the repo meets the factory's contract from day one.
 
 ## Context
-- **Specced 2026-11-26** (the plan below is proposed, waiting on Logan). The work it waited on is done: factory-v2 ticket 021 wrote the contract (`~/repos/factory-v2/docs/design.md`, "What a target repo provides") and purser's tickets 012, 015 and 016 are the worked example. Parked the same day from a review of purser (`~/repos/purser`, the first repo built with both skills) while bringing factory-v2 (`~/repos/factory-v2`) into it. Not specced: write "Done looks like" when it's picked up. This is phase 5 of that plan; purser's own fixes were its tickets 012 and 015.
+- **Specced 2026-11-26** (Logan approved the plan below the same day). The work it waited on is done: factory-v2 ticket 021 wrote the contract (`~/repos/factory-v2/docs/design.md`, "What a target repo provides") and purser's tickets 012, 015 and 016 are the worked example. Parked the same day from a review of purser (`~/repos/purser`, the first repo built with both skills) while bringing factory-v2 (`~/repos/factory-v2`) into it. Not specced: write "Done looks like" when it's picked up. This is phase 5 of that plan; purser's own fixes were its tickets 012 and 015.
 - **What went wrong in purser, traced to these skills:**
   - `project-kickoff/SKILL.md` (Delivery, pre-push hook): "Mirrors CI by running the same check command. Local is the source of truth; CI is confirmation." Purser's pre-push ran the full check on every push. It fought spec stubs three times and blocked the factory, which pushes on every stage. Purser cut it to a secrets scan. The principle should be the reverse: CI and branch rules are the gate no session can skip; local hooks are a convenience.
   - `project-kickoff/SKILL.md` (Supply chain) and `references/quality-gates.md`: a dependency audit inside the check command. It fails for reasons unrelated to the change, blocked an unrelated ticket in purser, and would park every factory job. Purser moved it to a weekly workflow.
@@ -67,7 +67,7 @@ A repo kicked off and scaffolded from these skills comes out like purser is toda
 - **Deleted assertions are a reviewer question, not a hard fail** (018's open boundary, decided here): legitimate deletions happen, and a later ticket may change a finished test.
 - Not in this ticket: a guard template (purser's is specific to its env files), and any change to `/vet` or `/wrap` in the scaffold.
 
-## Plan (proposed)
+## Plan (approved 2026-11-26)
 The pattern is the one purser ended on: **enforce at the boundary, give feedback inside it.** Alternatives not picked: keeping the full check in pre-push with an escape hatch (still blocks the wrong party, just less often), and making factory-readiness part of the scaffold (the scaffold serves repos with no code).
 
 1. **quality-gates.md first** (018, criterion 11): look up the focused/disabled-test rules in each ecosystem's current docs. Everything later cites this file.
